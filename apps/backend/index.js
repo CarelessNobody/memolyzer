@@ -13,12 +13,12 @@ app.get("/api/test", (req, res) => {
   res.send({ id: 1, test: "This is a test response from the backend!" });
 });
 
-app.post("/api/user", (req, res) => {
+app.post("/api/user/register", (req, res) => {
   res.send({ message: "This should create user based on data", data: req.body });
 });
 
-app.get("/api/user/:id", (req, res) => {
-  res.send({ message: "This should return user data for ID: " + req.params.id });
+app.post("/api/user/login", (req, res) => {
+  res.send({ message: "This should return user data for email: " + req.body.email + " and password: " + req.body.password });
 });
 
 app.post("/api/flashcard", (req, res) => {

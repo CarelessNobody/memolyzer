@@ -6,10 +6,10 @@ export const HeadFooter = () => {
           <a href='homepage.html'>Home</a>
         </li>
         <li className="nav-item">
-          <a href="#">Upload</a>
+          <a href="library.html">Library</a>
         </li>
         <li className="nav-item">
-          <a href="#">Library</a>
+          <a href="stats.html">Stats</a>
         </li>
         <li className="nav-item">
             <a href="registration.html">Login</a>

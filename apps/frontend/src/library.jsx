@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { Header, Footer } from './headfooter'
 import { useDropzone } from 'react-dropzone';
 import { useFetchWithFile } from './utils'
+import React from 'react';
 import './index.css'
 import './library.css'
 
@@ -72,6 +73,28 @@ const Flashcards = () => {
   );
 }
 
+function FlashCardsMaker({cardback, cardfront, testfront, testback}){
+  const [isFlipped, setIsFlipped] = React.useState(false);
+  function flipCard(){
+    setIsFlipped(!isFlipped);
+  }
+  const frontText = cardfront || testfront || '';
+  const backText = cardback || testback || '';
+  return(
+    <div className={`card ${isFlipped ? 'flipped' : ''}`} 
+    onClick={flipCard}> 
+      <div className="innercard"> 
+          <div className="top">
+              <p>{frontText}</p>
+            </div>
+            <div className="bottom">
+              <p>{backText}</p>
+            </div>
+      </div> 
+    </div>
+  )
+}
+
 function FileDropzone() {
   const {fetchUrl, data, isLoading, error } = useFetchWithFile();
   const onDrop = useCallback(async acceptedFiles => {
@@ -103,11 +126,21 @@ function FileDropzone() {
   );
 }
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header />
     <SortingBar />
-    <Flashcards />
+    <div className= "cardbox">
+    <FlashCardsMaker testfront={"front"} testback={"back"}/>
+    <FlashCardsMaker testfront={"front"} testback={"back"}/>
+    <FlashCardsMaker testfront={"front"} testback={"back"}/>
+    <FlashCardsMaker testfront={"front"} testback={"back"}/>
+    {/* <FlashCardsMaker testfront={"front"} testback={"back"}/>
+    <FlashCardsMaker testfront={"front"} testback={"back"}/>
+    <FlashCardsMaker testfront={"front"} testback={"back"}/>
+    <FlashCardsMaker testfront={"front"} testback={"back"}/> */}
+    </div>
     <FileDropzone />
     <Footer />
   </StrictMode>,

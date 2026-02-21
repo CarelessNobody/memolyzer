@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 
 export const baseUrl = "http://localhost:5000/api";
 
@@ -35,15 +34,3 @@ export const useFetch = () => {
 
   return {fetchUrl, data, isLoading, error };
 };
-
-export const notify = (message, time) => {
-    const options = {
-        position: "top-right",
-        autoClose: time || 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true
-    };
-
-    toast(message, options);
-}

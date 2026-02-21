@@ -46,7 +46,113 @@ h2{
     column-gap: 1.5rem;
 }
 
-.leftside {
+.leftcard{
+    width: 600px;
+    height: 300px;
+    perspective: 1000px;
+    cursor: pointer;
+    border-radius: 15px;    
+    padding: 1rem;
+}
+
+.innercard{
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    border-radius: 1rem;
+    background-color: var(--pink);
+}
+
+.leftcard.flipped .innercard{
+    transform: rotateY(180deg);
+}
+
+.cardtopleft, .cardbottomleft{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardbottomleft{
+    transform: rotateY(180deg);
+}
+
+.cardtopleft{
+    background-color: var(--pink);
+    color: var(--background);
+    border-radius : 1rem;
+}
+.cardbottomleft{
+    background-color: var(--lightblue);
+    color: var(--text);
+    border-radius: 1rem;
+
+}
+
+.rightcard{
+    width: 600px;
+    height: 300px;
+    perspective: 1000px;
+    cursor: pointer;
+    border-radius: 15px;    
+    padding: 1rem;
+}
+
+.rightinnercard{
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    border-radius: 1rem;
+    background-color: var(--pink);
+}
+
+.rightcard.flipped .rightinnercard{
+    transform: rotateY(180deg);
+}
+
+.cardtopright, .cardbottomright{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardbottomright{
+    transform: rotateY(180deg);
+}
+
+.cardtopright{
+    background-color: var(--lightblue);
+    color: var(--text);
+    border-radius: 1rem;
+}
+.cardbottomright{
+    background-color: var(--pink);
+    color: var(--background);
+    border-radius : 1rem;
+
+}
+/* .cardbottomleft{
+    flex: 1;
+    border-radius: 1rem;
+    background-color: var(--lightblue);
+    padding: 1rem;
+    font-size: 2rem;
+    color: var(--text);
+} */
+
+/* .leftside {
     flex: 1;
     border-radius: 1rem;
     background-color: var(--pink);
@@ -63,4 +169,4 @@ h2{
     padding: 1rem;
     font-size: 2rem;
     color: var(--text);
-}
+} */

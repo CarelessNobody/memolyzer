@@ -1,6 +1,7 @@
 export const HeadFooter = () => {
   return (
-    <headfooter className="navbar">
+
+    <div className="navbar">
       <ul>
         <li className="nav-item">
           <a href='homepage.html'>Home</a>
@@ -16,6 +17,6 @@ export const HeadFooter = () => {
         </li>
       </ul>
       <p className = "footer">Est 2/20/2026</p>
-    </headfooter>
+    </div>
   )
 }

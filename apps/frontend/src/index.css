@@ -23,19 +23,12 @@
   -moz-osx-font-smoothing: grayscale;
 
   --text: #0D1821;
+  --cyan: #209294;
   --darkblue: #344966;
   --lightblue: #B4CDED;
   --background: #F0F4EF;
-  --pink: #B279A7;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  --lightpink: #B279A7;
+  --pink: #B81776;
 }
 
 body {
@@ -87,7 +80,7 @@ button:focus-visible {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  background-color: var(--text);
+  background-color: var(--cyan);
   color: var(--white);
   padding: 1rem;
   border-radius: 0.5rem;

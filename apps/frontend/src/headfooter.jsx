@@ -11,9 +11,9 @@ export const Header = () => {
         <li className="nav-item">
           <a href="library.html">Your Library</a>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <a href="stats.html">Stats</a>
-        </li>
+        </li> */}
         <li className="nav-item">
             <a href="registration.html">Login</a>
         </li>

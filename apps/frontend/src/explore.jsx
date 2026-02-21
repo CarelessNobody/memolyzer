@@ -29,6 +29,7 @@ const GlobalLibrary = () => {
     return (
         <div className="globalLibrary">
             <h1>Global Library</h1>
+            <hr></hr>
         </div>
     );
 }

@@ -68,6 +68,7 @@ export const Homepage = () => {
                     </div>
                 </div>
             </div>
+            <hr></hr>
             <div className="meetTheTeam">
                 <h2>Meet Our Team!</h2>
                 <div className="developerCardsContainer">

@@ -1,6 +1,7 @@
-import { StrictMode, useState} from 'react'
+import { StrictMode, useState, useCallback} from 'react'
 import { createRoot } from 'react-dom/client'
 import { Header, Footer } from './headfooter'
+import { useDropzone } from 'react-dropzone';
 import './index.css'
 import './library.css'
 
@@ -68,11 +69,28 @@ const Flashcards = () => {
   );
 }
 
+function FileDropzone() {
+  const onDrop = useCallback(acceptedFiles => {
+    console.log(acceptedFiles);
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  return (
+    <div clasName="dropzoneContainer">
+      <div className="fileDropzone"{...getRootProps()} style={{ border: isDragActive ? "2px solid #00e676" : "2px dashed #ccc", padding: "40px" }}>
+        <input {...getInputProps()} />
+        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click</p>}
+      </div>
+    </div>
+  );
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header />
     <SortingBar />
     <Flashcards />
+    <FileDropzone />
     <Footer />
   </StrictMode>,
 )

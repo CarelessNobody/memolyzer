@@ -1,12 +1,6 @@
 
 :root {
-    text-align: center;
-
-  --text: #0D1821;
-  --darkblue: #344966;
-  --lightblue: #B4CDED;
-  --background: #F0F4EF;
-  --pink: #B279A7;
+  text-align: center;
 }
 
 .sortingBar {
@@ -22,7 +16,7 @@
 .searchBar{
   display: flex;
   justify-content: left;
-  width:  300px;
+  width: 400px;
   height: 50px;
   border-radius: .5rem;
   background-color: var(--background);

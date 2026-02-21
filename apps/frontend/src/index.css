@@ -37,6 +37,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 60px; /* header */
+  padding-bottom: 50px; /* footer */
   min-width: 320px;
   min-height: 100vh;
 }

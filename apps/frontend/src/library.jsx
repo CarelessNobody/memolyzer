@@ -7,6 +7,12 @@ import React from 'react';
 import './index.css'
 import './library.css'
 
+const flashcardData = [
+    {    question: "What is the capital of France?", answer: "Paris"}, 
+    {    question: "What is the capital of Germany?", answer: "Berlin"},
+    {    question: "What is the capital of Italy?", answer: "Rome"}
+  ];
+
 const SortingBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPublic, setShowPublic] = useState(true);
@@ -57,12 +63,6 @@ const CreateFlashcard = ({question, answer}) => {
 };
 
 const Flashcards = () => {
-  //TEMP!!!
-  const flashcardData = [
-    {    question: "What is the capital of France?", answer: "Paris"}, 
-    {    question: "What is the capital of Germany?", answer: "Berlin"},
-    {    question: "What is the capital of Italy?", answer: "Rome"}
-  ];
 
   return (
     <div className="flashcardContainer">

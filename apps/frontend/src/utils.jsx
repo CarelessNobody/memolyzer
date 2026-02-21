@@ -8,32 +8,63 @@ export const useFetch = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-    const fetchUrl = async ({ url, method, body }) => {
-        setError(null);
-        setLoading(true);
-        try {
-          const res = await fetch(baseUrl + url, {
-            method: method,
-            headers: {"Content-Type": "application/json"},
-            body: body ? JSON.stringify(body) : null
-          });
+  const fetchUrl = async ({ url, method, body }) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch(baseUrl + url, {
+        method: method,
+        headers: {"Content-Type": "application/json"},
+        body: body ? JSON.stringify(body) : null
+      });
 
-          if (!res.ok) 
-            throw new Error("HTTPS error: " + res.status);
+      if (!res.ok) 
+        throw new Error("HTTPS error: " + res.status);
 
-          const json = await res.json();
-          setData(json);
-        } catch (err) {
-          setError(err);
-          setData(null);
-          console.error("Fetch error:", err);
-        } finally {
-          setLoading(false);
-        }
-      };
+      const json = await res.json();
+      setData(json);
+    } catch (err) {
+      setError(err);
+      setData(null);
+      console.error("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {fetchUrl, data, isLoading, error };
 };
+
+export const useFetchWithFile = () => {
+  const [data, setData] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchUrl = async ({ url, method, body }) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch(baseUrl + url, {
+        method: method,
+        body: body
+      });
+
+      if (!res.ok)
+        throw new Error("HTTPS error: " + res.status);
+
+      const json = await res.json();
+      setData(json);
+    } catch (err) {
+      setError(err);
+      setData(null);
+      console.error("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { fetchUrl, data, isLoading, error };
+}
 
 const createNotification = (className, message, duration = 3000) => {
     const notification = document.createElement('div');

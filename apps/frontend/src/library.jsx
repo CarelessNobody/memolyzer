@@ -1,6 +1,8 @@
-import { StrictMode, useState} from 'react'
+import { StrictMode, useState, useCallback } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Header, Footer } from './headfooter'
+import { useDropzone } from 'react-dropzone';
+import { useFetchWithFile } from './utils'
 import './index.css'
 import './library.css'
 
@@ -70,11 +72,43 @@ const Flashcards = () => {
   );
 }
 
+function FileDropzone() {
+  const {fetchUrl, data, isLoading, error } = useFetchWithFile();
+  const onDrop = useCallback(async acceptedFiles => {
+    const file = acceptedFiles[0];
+    const formData = new FormData();
+    formData.append("uploadFile", file);
+
+    await fetchUrl({
+      url: '/flashcard/uploadGemini', 
+      method: 'POST', 
+      body: formData 
+    });
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+    if (data) {
+      console.log("File upload successful:", data);
+    } else if (error) {
+      console.error("File upload error:", error);
+    }
+
+  return (
+    <div className="dropzoneContainer">
+      <div className="fileDropzone" {...getRootProps()} style={{ border: isDragActive ? "2px solid #00e676" : "2px dashed #ccc", padding: "40px" }}>
+        <input {...getInputProps()} />
+        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click</p>}
+      </div>
+    </div>
+  );
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header />
     <SortingBar />
     <Flashcards />
+    <FileDropzone />
     <Footer />
   </StrictMode>,
 )

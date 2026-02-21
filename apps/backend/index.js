@@ -1,11 +1,13 @@
 const express = require("express");
+const fileUpload = require("express-fileupload");
+const fs = require("fs");
+const multer = require("multer");
 const cors = require("cors");
+
 require("dotenv").config();
 
-//npm install express cors dotenv
-//npm install concurrently -D
-
 const app = express();
+app.use(fileUpload());
 app.use(cors());
 app.use(express.json());
 
@@ -23,6 +25,10 @@ app.post("/api/user/login", (req, res) => {
 
 app.post("/api/flashcard", (req, res) => {
   res.send({ message: "This should create flashcard based on data", data: req.body });
+});
+
+app.post("/api/flashcard/uploadGemini", (req, res) => {
+  res.send({ message: "This should process the uploaded file and return flashcard data", fileName: req.files.uploadFile.name });
 });
 
 app.route("/api/flashcard/:id")

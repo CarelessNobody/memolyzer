@@ -147,30 +147,10 @@ h2{
     border-radius : 1rem;
 
 }
-/* .cardbottomleft{
-    flex: 1;
-    border-radius: 1rem;
-    background-color: var(--lightblue);
-    padding: 1rem;
-    font-size: 2rem;
-    color: var(--text);
-} */
-
-/* .leftside {
-    flex: 1;
-    border-radius: 1rem;
-    background-color: var(--pink);
-    padding: 1rem;
-    font-size: 2rem;
-    color: var(--background)
-    
+.cardbottomright p{
+    color: var(--background);
 }
 
-.rightside{
-    flex: 1;
-    border-radius: 1rem;
-    background-color: var(--lightblue);
-    padding: 1rem;
-    font-size: 2rem;
-    color: var(--text);
-} */
+.cardtopleft p{
+    color: var(--background);
+}

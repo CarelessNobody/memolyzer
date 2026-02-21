@@ -34,7 +34,9 @@
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px; /* header */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -88,7 +90,7 @@ button:focus-visible {
 }
 
 .failure-notification {
-    position: fixed;
+  position: fixed;
   top: 1rem;
   right: 1rem;
   background-color: var(--pink);

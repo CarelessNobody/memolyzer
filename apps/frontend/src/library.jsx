@@ -29,13 +29,15 @@ const SortingBar = () => {
             <div className="searchBar">
                 <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
             </div>
-            <div className="sortOption">
-              <label htmlFor="publicFilter" className="sortLabel">Public</label>
-              <input id="publicFilter" type="checkBox" checked={showPublic} onChange={handlePublicChange}></input>
-            </div>
-            <div className="sortOption">
-              <label htmlFor="privateFilter" className="sortLabel">Private</label>
-              <input id="privateFilter" type="checkBox" checked={showPrivate} onChange={handlePrivateChange}></input>
+            <div className = "sortGroup">
+              <div className="sortOption">
+                <label htmlFor="publicFilter" className="sortLabel">Public</label>
+                <input id="publicFilter" type="checkBox" checked={showPublic} onChange={handlePublicChange}></input>
+              </div>
+              <div className="sortOption">
+                <label htmlFor="privateFilter" className="sortLabel">Private</label>
+                <input id="privateFilter" type="checkBox" checked={showPrivate} onChange={handlePrivateChange}></input>
+              </div>
             </div>
         </div>
     );

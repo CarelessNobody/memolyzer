@@ -1,24 +1,66 @@
+
+:root {
+    text-align: center;
+
+  --text: #0D1821;
+  --darkblue: #344966;
+  --lightblue: #B4CDED;
+  --background: #F0F4EF;
+  --pink: #B279A7;
+}
+
 .sortingBar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 1rem;
   width: 100%;
   background-color: var(--lightblue);
+  padding: 1rem;
 }
 
-.searchBar {
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid var(--darkblue);
-  border-radius: 4px;
+.searchBar{
+  display: flex;
+  justify-content: left;
+  width:  300px;
+  height: 50px;
+  border-radius: .5rem;
+  background-color: var(--background);
+}
+
+.sortGroup{
+  display:flex;
+  gap: 1rem;
 }
 
 .sortOption {
   display: flex;
   align-items: center;
-  color: var(--text);
-  background-color: var(--background);
+  text-align: center;
+  gap: .5rem;
+  width: 100px;
+  height: 50px;
+  border-radius: .5rem;
+  margin-right: 10px;
+  padding-left: 15px;
+  color: var(--background);
+  background-color: var(--darkblue);
+}
+
+.sortOption input[type="checkbox"]{
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: var(--pink);
+  cursor: pointer;  
+  display: grid;
+  place-content: center;
+}
+
+.sortOption input[type="checkbox"]:checked::before{
+  content: "X";
+  color: var(--background);
+  font-size: 15px;
 }
 
 .flashcardContainer {

@@ -1,11 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HeadFooter } from './headfooter';
+import { Header, Footer } from './headfooter'
 import './index.css'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <HeadFooter />
+        <Header />
         <h1>Stats Page</h1>
+        <Footer />
     </StrictMode>,
 )

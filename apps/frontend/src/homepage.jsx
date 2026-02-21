@@ -1,6 +1,6 @@
 export const Homepage = () => {
     return (
-        <homepage>
+        <div className="homepage">
             <div className="title">
                 <h1>Learn how to elevate your studying!</h1>
                 <hr></hr>
@@ -13,6 +13,6 @@ export const Homepage = () => {
                 <p className = "rightside">It also allows you to generate a 
                     library for yourself that stores all of your past flashcards!</p>
             </div>
-        </homepage>
+        </div>
     )
 }

@@ -1,14 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HeadFooter } from './headfooter';
+import { Header, Footer } from './headfooter'
+import { notify } from './utils';
 import './index.css'
 
 const CreateFlashcard = ({question, answer}) => {
     return (
         <div className="flashcard">
             <h1>TEMP Flashcard</h1>
-            <input type="text" placeholder="Question" value={question} />
-            <input type="text" placeholder="Answer" value={answer} />
+            <p>{question}</p>
+            <p>{answer}</p>
         </div>
     );
 };
@@ -20,14 +21,21 @@ const flashcardData = [
   {    question: "What is the capital of Italy?", answer: "Rome"}
 ];
 
+function notification(message, time) {
+  notify(message, time);
+  console.log("Notification sent:", message);
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HeadFooter />
+    <Header />
     <div className="flashcard-container">
       {flashcardData.map((flashcard) => 
         <CreateFlashcard key={flashcard.question} question={flashcard.question} answer={flashcard.answer} />)
       }
+      {notification("Welcome to Memolyzer!", 5000)}
     </div>
+    <Footer />
   </StrictMode>,
 )
 

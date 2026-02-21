@@ -7,10 +7,6 @@
 }
 
 :root {
-  --white: #fff;
-  --light-grey: #e1e0e0;
-  --dark-purple: #7c0e7c;
-  --black: #000;
   --text: #0D1821;
   --darkblue: #344966;
   --lightblue: #B4CDED;
@@ -20,7 +16,7 @@
 }
 
 body {
-  background-color: var(--light-grey);
+  background-color: var(--background);
 }
 
 .navbar {
@@ -64,7 +60,7 @@ button {
 }
 
 button:hover {
-  background-color: var(--dark-purple);
+  background-color: var(--pink);
   color: var(--white);
 }
 
@@ -75,7 +71,7 @@ button:hover {
   right: 5%;
   transition: opacity 0.5s ease;
   display: block;
-  background-color: var(--white);
+  background-color: var(--background);
 }
 
 @media (min-width: 768px) {

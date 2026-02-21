@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useState } from 'react';
 import { useFetch } from './utils';
+import { HeadFooter } from './headfooter';
 import './index.css'
 
 const Registration = () => {
@@ -72,6 +73,7 @@ const Login = () => {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <HeadFooter />
     <Registration />
     <Login />
   </StrictMode>,

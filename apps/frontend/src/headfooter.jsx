@@ -1,9 +1,9 @@
-export const Header = () => {
+export const HeadFooter = () => {
   return (
-    <header className="navbar">
+    <headfooter className="navbar">
       <ul>
         <li className="nav-item">
-          <a href='#'>Home</a>
+          <a href='homepage.html'>Home</a>
         </li>
         <li className="nav-item">
           <a href="#">Upload</a>
@@ -12,9 +12,10 @@ export const Header = () => {
           <a href="#">Library</a>
         </li>
         <li className="nav-item">
-            <a href="#">Login</a>
+            <a href="registration.html">Login</a>
         </li>
       </ul>
-    </header>
+      <p className = "footer">Est 2/20/2026</p>
+    </headfooter>
   )
 }

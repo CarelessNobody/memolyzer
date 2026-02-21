@@ -1,22 +1,28 @@
-export const HeadFooter = () => {
+export const Header = () => {
   return (
-
-    <div className="navbar">
+    <header className="navbar">
       <ul>
         <li className="nav-item">
           <a href='homepage.html'>Home</a>
         </li>
         <li className="nav-item">
-          <a href="#">Upload</a>
+          <a href="library.html">Library</a>
         </li>
         <li className="nav-item">
-          <a href="#">Library</a>
+          <a href="stats.html">Stats</a>
         </li>
         <li className="nav-item">
             <a href="registration.html">Login</a>
         </li>
       </ul>
-      <p className = "footer">Est 2/20/2026</p>
-    </div>
+    </header>
+  )
+}
+
+export const Footer = () => {
+  return (
+    <footer className="footer">
+      <p>Est 2/20/2026</p>
+    </footer>
   )
 }

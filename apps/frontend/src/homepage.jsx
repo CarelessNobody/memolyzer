@@ -9,7 +9,7 @@ export const Homepage = () => {
         setIsFlippedRight(!isFlippedRight);
     }
     return (
-        <div>
+        <div className="homepage">
             <div className="title">
                 <h1>Learn how to elevate your studying!</h1>
                 <hr></hr>
@@ -47,6 +47,6 @@ export const Homepage = () => {
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
     )
 }

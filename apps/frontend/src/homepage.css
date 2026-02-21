@@ -60,7 +60,7 @@ h2{
     transform-style: preserve-3d;
     position: relative;
     border-radius: 1rem;
-    background-color: var(--pink);
+    background-color: var(--lightpink);
 }
 
 .leftcard.flipped .innercard{
@@ -82,7 +82,7 @@ h2{
 }
 
 .cardtopleft{
-    background-color: var(--pink);
+    background-color: var(--lightpink);
     color: var(--background);
     border-radius : 1rem;
 }
@@ -109,7 +109,7 @@ h2{
     transform-style: preserve-3d;
     position: relative;
     border-radius: 1rem;
-    background-color: var(--pink);
+    background-color: var(--lightpink);
 }
 
 .rightcard.flipped .rightinnercard{
@@ -136,7 +136,7 @@ h2{
     border-radius: 1rem;
 }
 .cardbottomright{
-    background-color: var(--pink);
+    background-color: var(--lightpink);
     color: var(--background);
     border-radius : 1rem;
 
@@ -183,7 +183,7 @@ h2{
 }
 
 .developerCard h4 {
-    color: var(--lightpink);
+    color: var(--lightlightpink);
 }
 
 .developerCard p {

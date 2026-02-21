@@ -46,7 +46,7 @@
   width: 20px;
   height: 20px;
   border-radius: 4px;
-  background-color: var(--pink);
+  background-color: var(--lightpink);
   cursor: pointer;  
   display: grid;
   place-content: center;
@@ -97,7 +97,7 @@
     transition: transform 0.6s;
     transform-style: preserve-3d;
     position: relative;
-    background-color: var(--pink);
+    background-color: var(--lightpink);
 }
 
 .card.flipped .innercard{
@@ -124,7 +124,7 @@
 }
 
 .top{
-    background-color: var(--pink);
+    background-color: var(--lightpink);
     color: var(--background);
     border-radius : 1rem;
     width: 100%;

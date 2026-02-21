@@ -27,7 +27,7 @@
   --darkblue: #344966;
   --lightblue: #B4CDED;
   --background: #F0F4EF;
-  --lightpink: #B279A7;
+  --lightpink: #be71af;
   --pink: #B81776;
 }
 
@@ -68,7 +68,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  background-color: var(--pink);
+  background-color: var(--lightpink);
   color: var(--white);
   border-color: #646cff;
 }
@@ -94,7 +94,7 @@ button:focus-visible {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  background-color: var(--pink);
+  background-color: var(--lightpink);
   color: var(--white);
   padding: 1rem;
   border-radius: 0.5rem;

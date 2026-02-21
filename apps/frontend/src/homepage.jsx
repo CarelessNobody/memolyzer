@@ -1,4 +1,25 @@
 import React from 'react';
+import ayushi from './assets/ayushi.jpg';
+import ariya from './assets/ariya.jpg';
+import ruihan from './assets/ruihan.jpg';
+
+const DeveloperCard = ({ img, name, role, description }) => {
+    return (
+        <div className="developerCard">
+            <img src={img} alt={name+"'s picture"} />
+            <h3>{name}</h3>
+            <h4>{role}</h4>
+            <p>{description}</p>
+        </div>
+    );
+}
+
+const developmentTeam = [
+    { img: ariya, name: "Ariya Mouthapong", role: "Frontend Developer", description: "temp description" },
+    { img: ayushi, name: "Ayushi Srivastava", role: "Backend Developer", description: "temp description" },
+    { img: ruihan, name: "Ruihan Weng", role: "Full Stack Developer", description: "temp description" }
+];
+
 export const Homepage = () => {
     const [isFlippedLeft, setIsFlippedLeft] = React.useState(false);
     const [isFlippedRight, setIsFlippedRight] = React.useState(false);
@@ -45,6 +66,20 @@ export const Homepage = () => {
                         </p>
                     </div>
                     </div>
+                </div>
+            </div>
+            <div className="meetTheTeam">
+                <h2>Meet Our Team!</h2>
+                <div className="developerCardsContainer">
+                    {developmentTeam.map((dev, index) => (
+                        <DeveloperCard 
+                            key={index}
+                            img={dev.img}
+                            name={dev.name}
+                            role={dev.role}
+                            description={dev.description}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

@@ -1,0 +1,90 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+
+  --text: #0D1821;
+  --darkblue: #344966;
+  --lightblue: #B4CDED;
+  --background: #F0F4EF;
+  --pink: #B279A7;
+}
+
+.form-container {
+    /* background-color: var(--background);
+    border-radius: 15px;
+    padding: 2rem;
+    width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex-direction: column; */
+    display: flex;
+    gap: 25rem;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    align-items: center;
+    
+}
+
+.login-form {
+    width: 400px;
+    height: 450px;
+    flex: 1;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--lightblue);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 10px 10px 20px rgb(128, 162, 208);
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.login-form button {
+    margin-top: 6.5rem;
+}
+
+.registration-form {
+    width: 400px;
+    height: 450px;
+    flex: 1;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--lightblue);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 10px 10px 20px rgb(128, 162, 208);
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.registration-form input, .login-form input {
+    padding: .75rem;
+    border: 1px solid var(--darkblue);
+    border-radius: 0.5rem;
+    background-color: var(--background);
+    color: var(--text);
+}
+.form-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text);
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 0;
+}

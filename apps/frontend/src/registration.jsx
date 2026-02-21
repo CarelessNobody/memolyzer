@@ -32,8 +32,11 @@ const Registration = () => {
   return (
     <form className='registration-form' onSubmit={handleSubmit}>
       <h1>Registration</h1>
+      <p className = "form-label">Username</p>
       <input type="text" name="username" placeholder="Username" />
+      <p className = "form-label">Email</p>
       <input type="email" name="email" placeholder="Email" />
+      <p className = "form-label">Password</p>
       <input type="password" name="password" placeholder="Password" />
       <button>Submit</button>
     </form>
@@ -66,7 +69,9 @@ const Login = () => {
     return (
     <form className="login-form" onSubmit={handleLogin}>
         <h1>Login</h1>
+        <p className = "form-label">Email</p>
         <input type="email" name="email" placeholder="Email" />
+        <p className = "form-label">Password</p>
         <input type="password" name="password" placeholder="Password" />
         <button>Submit</button>
     </form>

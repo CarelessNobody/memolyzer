@@ -176,6 +176,7 @@ h2{
     height: 250px;
     border-radius: 50%;
     object-fit: cover;
+    box-shadow: 0 5px 40px rgba(0, 0, 0, 0.3);
 }
 
 .developerCard h3 {

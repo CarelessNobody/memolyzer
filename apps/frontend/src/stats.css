@@ -1,0 +1,15 @@
+.stats-page {
+    padding: 2rem;
+    background-color: var(--background);
+}
+
+.stats-content {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--lightblue);
+    border-radius: 1rem;
+    color: var(--text);
+
+    display: flex;
+    flex-direction: column;
+}

@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Header, Footer } from './headfooter'
 import './index.css'
+import './library.css'
 
 const CreateFlashcard = ({question, answer}) => {
     return (

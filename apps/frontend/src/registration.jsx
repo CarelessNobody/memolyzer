@@ -1,9 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { useState } from 'react';
-import { useFetch } from './utils';
+import { useFetch, successNotification } from './utils';
 import { Header, Footer } from './headfooter'
 import './index.css'
+import './registration.css'
 
 const Registration = () => {
   const {fetchUrl, data, isLoading, error } = useFetch();
@@ -26,10 +26,11 @@ const Registration = () => {
         console.error("Registration error:", error);
     } else if (data) {
         console.log("Registration successful:", data);
+        successNotification("Registration successful!");
     }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='registration-form' onSubmit={handleSubmit}>
       <h1>Registration</h1>
       <input type="text" name="username" placeholder="Username" />
       <input type="email" name="email" placeholder="Email" />
@@ -59,10 +60,11 @@ const Login = () => {
         console.error("Login error:", error);
     } else if (data) {
         console.log("Login successful:", data);
+        successNotification("Login successful!");
     }
 
     return (
-    <form onSubmit={handleLogin}>
+    <form className="login-form" onSubmit={handleLogin}>
         <h1>Login</h1>
         <input type="email" name="email" placeholder="Email" />
         <input type="password" name="password" placeholder="Password" />
@@ -74,8 +76,10 @@ const Login = () => {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header />
-    <Registration />
-    <Login />
+    <div className="form-container">
+      <Registration />
+      <Login />
+    </div>
     <Footer />
   </StrictMode>,
 )

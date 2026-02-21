@@ -7,12 +7,16 @@
 }
 
 :root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+
   --text: #0D1821;
   --darkblue: #344966;
   --lightblue: #B4CDED;
   --background: #F0F4EF;
   --pink: #B279A7;
-
 }
 
 body {

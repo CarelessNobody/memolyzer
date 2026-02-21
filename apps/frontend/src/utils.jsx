@@ -34,3 +34,23 @@ export const useFetch = () => {
 
   return {fetchUrl, data, isLoading, error };
 };
+
+const createNotification = (className, message, duration = 3000) => {
+    const notification = document.createElement('div');
+    notification.className = `${className}`;
+    notification.textContent = message;
+
+    document.getElementById('root').appendChild(notification);
+    setTimeout(() => {
+        notification.remove();
+    }, duration)
+}
+
+export function successNotification(message, duration = 3000) {
+    createNotification("success-notification", message, duration);
+}
+
+export function failureNotification(message, duration = 3000) {
+    createNotification("failure-notification", message, duration);
+}
+

@@ -81,8 +81,21 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.notification {
+/* Custom styles for the notifications */
+
+.success-notification {
   position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: var(--text);
+  color: var(--white);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.failure-notification {
+    position: fixed;
   top: 1rem;
   right: 1rem;
   background-color: var(--pink);

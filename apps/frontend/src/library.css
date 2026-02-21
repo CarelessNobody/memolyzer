@@ -134,3 +134,22 @@
 .top p, .bottom p{
   margin: 0;
 }
+
+.editIcon, .deleteIcon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 5px;
+    right: 35px;
+    cursor: pointer;
+}
+
+.editIcon {
+    top: 5px;
+    right: 35px;
+}
+
+.deleteIcon {
+    top: 5px;
+    right: 5px;
+}

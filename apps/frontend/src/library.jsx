@@ -7,11 +7,15 @@ import React from 'react';
 import './index.css'
 import './library.css'
 
+import close from './assets/close.png'
+import edit from './assets/edit.png'
+
+//Should fetch from database at first, temp data for now
 const flashcardData = [
-    {    question: "What is the capital of France?", answer: "Paris"}, 
-    {    question: "What is the capital of Germany?", answer: "Berlin"},
-    {    question: "What is the capital of Italy?", answer: "Rome"}
-  ];
+    {   id:1, question: "What is the capital of France?", answer: "Paris"}, 
+    {   id:2, question: "What is the capital of Germany?", answer: "Berlin"},
+    {   id:3, question: "What is the capital of Italy?", answer: "Rome"}
+];
 
 const SortingBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -52,42 +56,44 @@ const SortingBar = () => {
     );
 }
 
-const CreateFlashcard = ({question, answer}) => {
-    return (
-        <div className="flashcard">
-            <h1>TEMP Flashcard</h1>
-            <p>{question}</p>
-            <p>{answer}</p>
-        </div>
-    );
-};
-
-const Flashcards = () => {
-
-  return (
-    <div className="flashcardContainer">
-      {flashcardData.map((flashcard) => 
-        <CreateFlashcard key={flashcard.question} question={flashcard.question} answer={flashcard.answer} />)
-      }
-    </div>
-  );
-}
-
-function FlashCardsMaker({cardback, cardfront, testfront, testback}){
+function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
   const [isFlipped, setIsFlipped] = React.useState(false);
+
   function flipCard(){
     setIsFlipped(!isFlipped);
   }
-  const frontText = cardfront || testfront || '';
-  const backText = cardback || testback || '';
+
+  function handleDelete(e){
+    e.stopPropagation(); //Tops card flipping
+    if (onDelete) onDelete(id);
+  }
+
+  function handleEdit(e){
+    e.stopPropagation();
+
+    //Temp testing
+    const newFront = prompt("Enter new front text:", cardfront);
+    const newBack = prompt("Enter new back text:", cardback);
+
+    if (newFront !== null && newBack !== null && onEdit) {
+      onEdit(id, newFront, newBack);
+    }
+  }
+
+  const frontText = cardfront || '';
+  const backText = cardback || '';
   return(
     <div className={`card ${isFlipped ? 'flipped' : ''}`} 
     onClick={flipCard}> 
       <div className="innercard"> 
           <div className="top">
+              <img className="editIcon" src={edit} alt="Edit" onClick={handleEdit}/>
+              <img className="deleteIcon" src={close} alt="Delete" onClick={handleDelete}/>
               <p>{frontText}</p>
             </div>
             <div className="bottom">
+              <img className="editIcon" src={edit} alt="Edit" onClick={handleEdit}/>
+              <img className="deleteIcon" src={close} alt="Delete" onClick={handleDelete}/>
               <p>{backText}</p>
             </div>
       </div> 
@@ -126,21 +132,41 @@ function FileDropzone() {
   );
 }
 
+const Library = () => {
+    const [cards, setCards] = useState(flashcardData);
+
+    const removeCard = (id) => {
+      //Should also delete from database, temp for now
+      setCards(prev => prev.filter(c => c.id !== id));
+    };
+
+    const editCard = (id, newFront, newBack) => {
+      //Should also update database, temp for now
+      setCards(prev => prev.map(c => c.id === id ? { ...c, question: newFront, answer: newBack } : c));
+    };
+
+    return (    
+    <div className= "cardbox">
+      {cards.map(flashcard => 
+        <FlashCardsMaker 
+          key={flashcard.id} 
+          id={flashcard.id}
+          cardfront={flashcard.question} 
+          cardback={flashcard.answer}
+          onDelete={removeCard}
+          onEdit={editCard} />
+        )}
+    </div>
+    );
+};
+
+//TODO: Add way to add flashcards
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header />
     <SortingBar />
-    <div className= "cardbox">
-    <FlashCardsMaker testfront={"front"} testback={"back"}/>
-    <FlashCardsMaker testfront={"front"} testback={"back"}/>
-    <FlashCardsMaker testfront={"front"} testback={"back"}/>
-    <FlashCardsMaker testfront={"front"} testback={"back"}/>
-    {/* <FlashCardsMaker testfront={"front"} testback={"back"}/>
-    <FlashCardsMaker testfront={"front"} testback={"back"}/>
-    <FlashCardsMaker testfront={"front"} testback={"back"}/>
-    <FlashCardsMaker testfront={"front"} testback={"back"}/> */}
-    </div>
+    <Library />
     <FileDropzone />
     <Footer />
   </StrictMode>,

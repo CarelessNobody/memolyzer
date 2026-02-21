@@ -6,7 +6,10 @@ export const Header = () => {
           <a href='homepage.html'>Home</a>
         </li>
         <li className="nav-item">
-          <a href="library.html">Library</a>
+          <a href="explore.html">Explore</a>
+        </li>
+        <li className="nav-item">
+          <a href="library.html">Your Library</a>
         </li>
         <li className="nav-item">
           <a href="stats.html">Stats</a>

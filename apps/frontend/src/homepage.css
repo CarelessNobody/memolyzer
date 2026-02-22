@@ -181,13 +181,16 @@ h2{
 
 .developerCard h3 {
     color: var(--lightblue);
+    width: 300px;
 }
 
 .developerCard h4 {
     color: var(--lightlightpink);
+    width: 300px;
 }
 
 .developerCard p {
     color: var(--background);
+    width: 300px;
 }
 

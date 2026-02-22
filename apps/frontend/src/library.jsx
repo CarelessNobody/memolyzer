@@ -102,12 +102,12 @@ function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
     onClick={flipCard}> 
       <div className="innercard"> 
           <div className="top">
-              <img className="editIcon" src={edit} alt="Edit" onClick={handleEdit}/>
-              <img className="deleteIcon" src={close} alt="Delete" onClick={handleDelete}/>
+              <img className="editIcon" src={edit} alt="Edit flashcard" onClick={handleEdit}/>
+              <img className="deleteIcon" src={close} alt="Delete flashcard" onClick={handleDelete}/>
               <p>{frontText}</p>
             </div>
             <div className="bottom">
-              <img className="editIcon" src={edit} alt="Edit" onClick={handleEdit}/>
+              <img className="editIcon" src={edit} alt="Edit flashcard" onClick={handleEdit}/>
               <img className="deleteIcon" src={close} alt="Delete" onClick={handleDelete}/>
               <p>{backText}</p>
             </div>

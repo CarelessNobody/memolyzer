@@ -27,3 +27,7 @@ hr{
     background-color: var(--darkblue);
     margin: 1rem 0;
 }
+
+h1 {
+    color: white;
+}

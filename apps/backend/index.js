@@ -54,34 +54,43 @@ app.post("/api/user/login", async (req, res) => {
   }
 });
 
-app.post("/api/flashcard/uploadGemini", async(req, res) => {
+app.post("/api/flashcard/uploadGemini/:userId", async (req, res) => {
   let tempPath;
   try {
+    const userId = req.params.userId // or get from auth/session
+    if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
     if (!req.files || !req.files.uploadFile) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const uploadFile = req.files.uploadFile;
     tempPath = `uploads/${uploadFile.name}`;
-
     await uploadFile.mv(tempPath);
 
     const flashcards = await generateFlashcards(tempPath);
 
-    res.status(200).json({ message: 'File processed', fileName: uploadFile.name, flashcards, count: flashcards.length });
+    // Create StudySet in DB
+    const newStudySet = await StudySet.create({
+      creator: userId,
+      title: req.body.title || 'New Flashcard Set',
+      description: req.body.description || '',
+      flashcards
+    });
+
+    res.status(200).json({
+      message: 'Studyset created from file',
+      studyset: newStudySet
+    });
+
   } catch (error) {
-    console.error('\n--- Test Failed ---');
-    console.error(error.message);
+    console.error('Upload failed:', error);
     res.status(500).json({ error: error.message });
   } finally {
-    try {
-      if (tempPath && fs.existsSync(tempPath)) {
-        fs.unlink(tempPath, (err) => {
-          if (err) console.error('Failed to remove temp file', err);
-        });
-      }
-    } catch (e) {
-      console.error('Error during temp file cleanup', e);
+    if (tempPath && fs.existsSync(tempPath)) {
+      fs.unlink(tempPath, (err) => {
+        if (err) console.error('Failed to remove temp file', err);
+      });
     }
   }
 });

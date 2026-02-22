@@ -121,9 +121,14 @@ function FileDropzone({fetchUrl}) {
     const file = acceptedFiles[0];
     const formData = new FormData();
     formData.append("uploadFile", file);
+    formData.append("title", "My Flashcard Set");
+    formData.append("description", "Some description");
+
+    const userId = getUserId();
+    if (!userId) return alert("Please sign in!");
 
     await fetchUrl({
-      url: '/flashcard/uploadGemini', 
+      url: '/flashcard/uploadGemini/' + userId, 
       method: 'POST', 
       body: formData 
     });

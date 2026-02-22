@@ -42,7 +42,7 @@ export const useFetch = () => {
   return {fetchUrl, data, isLoading, error, resetState };
 };
 
-export const useFetchWithFile = () => {
+export const useFetchWithFile = () => { 
   const [fileData, setData] = useState(null);
   const [fileIsLoading, setLoading] = useState(true);
   const [fileError, setError] = useState(null);
@@ -53,17 +53,24 @@ export const useFetchWithFile = () => {
     setLoading(true);
   }
 
-  const fileFetchUrl = async ({ url, method, body }) => {
+  const fileFetchUrl = async ({ url, method = "GET", body }) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch(baseUrl + url, {
-        method: method,
-        body: body
-      });
+      const options = { method };
+
+      if (body instanceof FormData) {
+        options.body = body;
+        // Do NOT set headers manually for FormData!
+      } else if (body) {
+        options.body = JSON.stringify(body);
+        options.headers = { "Content-Type": "application/json" };
+      }
+
+      const res = await fetch(baseUrl + url, options);
 
       if (!res.ok)
-        throw new Error("HTTPS error: " + res.status);
+        throw new Error("HTTP error: " + res.status + " " + res.statusText);
 
       const json = await res.json();
       setData(json);
@@ -72,13 +79,14 @@ export const useFetchWithFile = () => {
       setError(err);
       setData(null);
       console.error("Fetch error:", err);
+      throw err; // <- so frontend can also catch it
     } finally {
       setLoading(false);
     }
   };
 
-  return { fileFetchUrl, fileData, fileIsLoading, fileError, fileResetState };
-}
+  return { fileData, fileIsLoading, fileError, fileFetchUrl, fileResetState };
+};
 
 const createNotification = (className, message, duration = 3000) => {
     const notification = document.createElement('div');

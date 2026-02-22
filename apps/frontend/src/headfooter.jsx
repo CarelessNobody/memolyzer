@@ -1,7 +1,6 @@
 import { useFetch, successNotification, failureNotification, getUserId } from './utils';
 export const Header = () => {
   const userId = getUserId();
-  
   const handleAuth = (e) => {
     if (userId) {
       localStorage.removeItem('userID');

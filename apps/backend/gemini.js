@@ -6,10 +6,25 @@ const ai = new GoogleGenAI({apiKey: API_KEY});
 
 async function generateFlashcards(filepath) {
     // uploading file based on the user's pdf
+    const path = require('path');
+    // Read file into a Buffer so the SDK can access `.slice` and `.length`
+    const buffer = fs.readFileSync(filepath);
+    const stats = fs.statSync(filepath);
+
+    // Some SDKs expect a File-like object with `size` and `slice`.
+    const fileLike = {
+        name: path.basename(filepath),
+        size: buffer.length,
+        slice: (start, end) => buffer.slice(start, end),
+        // provide a stream if SDK uses it
+        stream: () => require('stream').Readable.from(buffer)
+    };
+
     const file = await ai.files.upload({
-        file: fs.createReadStream(filepath),
+        file: fileLike,
+        filename: path.basename(filepath),
         config: {
-            displayName: "Study Document",
+            displayName: path.basename(filepath),
             mimeType: "application/pdf"
         }
     });
@@ -25,7 +40,7 @@ async function generateFlashcards(filepath) {
             setTimeout(resolve, 5000);
         });
     }
-    if (file.state === 'FAILED') {
+    if (getFile.state === 'FAILED') {
         throw new Error('File processing failed.');
     }
 

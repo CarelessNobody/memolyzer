@@ -9,13 +9,6 @@ import './library.css'
 import close from './assets/close.webp'
 import edit from './assets/edit.webp'
 
-//Should fetch from database at first, temp data for now
-const flashcardData = [
-    {   id:1, question: "What is the capital of France?", answer: "Paris"}, 
-    {   id:2, question: "What is the capital of Germany?", answer: "Berlin"},
-    {   id:3, question: "What is the capital of Italy?", answer: "Rome"}
-];
-
 const SortingBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPublic, setShowPublic] = useState(true);
@@ -146,7 +139,7 @@ function FileDropzone() {
   );
 }
 
-const Library = () => {
+const FlashCardSet = ({flashcardData}) => {
     const [cards, setCards] = useState(flashcardData);
 
     const removeCard = (id) => {
@@ -197,6 +190,32 @@ const Library = () => {
     </div>
     );
 };
+
+const Library = () => {
+  //Should fetch from database at first, temp data for now
+  const flashcardData = {
+    "cardSets": [
+      [{   id:1, question: "What is the capital of France?", answer: "Paris"}, 
+      {   id:2, question: "What is the capital of Germany?", answer: "Berlin"},
+      {   id:3, question: "What is the capital of Italy?", answer: "Rome"}],
+
+      [{   id:4, question: "Does this work?", answer: "YES!"}, 
+      {   id:5, question: "Are we good?", answer: "YES!"},
+      {   id:6, question: "Are we sane?", answer: "NO!"}]
+    ],
+    "message": "hello"
+  };
+
+  return (
+    <div>
+    {flashcardData.cardSets.map(
+        (flashCardSets, index) => (
+          <FlashCardSet key={index} flashcardData={flashCardSets}/>
+        )
+      )}
+    </div>
+  )
+}
 
 //TODO: Add way to add flashcards
 

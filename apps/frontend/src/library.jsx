@@ -6,16 +6,8 @@ import { useFetchWithFile } from './utils'
 import React from 'react';
 import './index.css'
 import './library.css'
-
 import close from './assets/close.webp'
 import edit from './assets/edit.webp'
-
-//Should fetch from database at first, temp data for now
-const flashcardData = [
-    {   id:1, question: "What is the capital of France?", answer: "Paris"}, 
-    {   id:2, question: "What is the capital of Germany?", answer: "Berlin"},
-    {   id:3, question: "What is the capital of Italy?", answer: "Rome"}
-];
 
 const SortingBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,22 +33,30 @@ const SortingBar = () => {
   };
 
     return (
-        <div className="sortingBar">
-            <div className="searchBar">
-                <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
-            </div>
-            <div className = "sortGroup">
-              <div className="sortOption">
-                <label htmlFor="publicFilter" className="sortLabel">Public</label>
-                <input id="publicFilter" type="checkBox" checked={showPublic} onChange={handlePublicChange}></input>
-              </div>
-              <div className="sortOption">
-                <label htmlFor="privateFilter" className="sortLabel">Private</label>
-                <input id="privateFilter" type="checkBox" checked={showPrivate} onChange={handlePrivateChange}></input>
-              </div>
-            </div>
+      <>
+        <div className="searchBar">
+            <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
         </div>
+        <div className = "sortGroup">
+          <div className="sortOption">
+            <label htmlFor="publicFilter" className="sortLabel">Public</label>
+            <input id="publicFilter" type="checkBox" checked={showPublic} onChange={handlePublicChange}></input>
+          </div>
+          <div className="sortOption">
+            <label htmlFor="privateFilter" className="sortLabel">Private</label>
+            <input id="privateFilter" type="checkBox" checked={showPrivate} onChange={handlePrivateChange}></input>
+          </div>
+        </div>
+      </>
     );
+}
+
+const AddFlashcardSetButton = ({ onAdd }) => {
+  return (
+    <button className="addCardButton" onClick={onAdd}>
+      Add a Flashcard set!
+    </button>
+  )
 }
 
 const AddCardButton = ({ onAdd }) => {
@@ -70,26 +70,22 @@ const AddCardButton = ({ onAdd }) => {
 
   return (
     <button className="addCardButton" onClick={handleAdd}>
-      Add Flashcard
+      Add a Flashcard!
     </button>
   )
 }
 
 function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
   const [isFlipped, setIsFlipped] = React.useState(false);
-
   function flipCard(){
     setIsFlipped(!isFlipped);
   }
-
   function handleDelete(e){
     e.stopPropagation(); //Tops card flipping
     if (onDelete) onDelete(id);
   }
-
   function handleEdit(e){
     e.stopPropagation();
-
     //Temp testing
     const newFront = prompt("Enter new front text:", cardfront);
     const newBack = prompt("Enter new back text:", cardback);
@@ -120,8 +116,7 @@ function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
   )
 }
 
-function FileDropzone() {
-  const {fetchUrl, data, isLoading, error } = useFetchWithFile();
+function FileDropzone({fetchUrl}) {
   const onDrop = useCallback(async acceptedFiles => {
     const file = acceptedFiles[0];
     const formData = new FormData();
@@ -135,25 +130,19 @@ function FileDropzone() {
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-    if (data) {
-      console.log("File upload successful:", data);
-
-    } else if (error) {
-      console.error("File upload error:", error);
-    }
-
   return (
     <div className="dropzoneContainer">
       <div className="fileDropzone" {...getRootProps()} style={{ border: isDragActive ? "2px solid #00e676" : "2px dashed #ccc", padding: "40px" }}>
         <input {...getInputProps()} />
-        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click to add a new flashcard!</p>}
+        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click to add 10 new flashcards based on the pdf!</p>}
       </div>
     </div>
   );
 }
 
-const Library = () => {
+const FlashCardSet = ({flashcardData}) => {
     const [cards, setCards] = useState(flashcardData);
+    const {fetchUrl, data, isLoading, error } = useFetchWithFile(); //For drag & drop
 
     const removeCard = (id) => {
       //Should also delete from database, temp for now
@@ -172,27 +161,74 @@ const Library = () => {
     }
 
     return (    
-    <div>
-      <div className="topBar">
-        <SortingBar />
-        <AddCardButton onAdd={addCard} />
-      </div>
-      
-      <div className= "cardbox">
-        {cards.map(flashcard => 
-          <FlashCardsMaker 
-            key={flashcard.id} 
-            id={flashcard.id}
-            cardfront={flashcard.question} 
-            cardback={flashcard.answer}
-            onDelete={removeCard}
-            onEdit={editCard} />
-          )}
-      </div>
-      <FileDropzone />
+    <div className="flashcardSet">
+      <FileDropzone fetchUrl={fetchUrl}/>
+      <header>
+        <div className= "cardbox">
+          <div className = "descBox">
+            <div className="leftDescBox">
+              <div className = "flashcardName">
+                <input type="text" placeholder="Enter Flashcard Name"/>
+              </div>
+              <AddCardButton onAdd={addCard} />
+            </div>
+            <div className = "flashcardDesc">
+              <textarea id = "message" name = "message" rows="10" cols="90">
+              </textarea>
+            </div>
+          </div>
+          {cards.map(flashcard => 
+            <FlashCardsMaker 
+              key={flashcard.id} 
+              id={flashcard.id}
+              cardfront={flashcard.question} 
+              cardback={flashcard.answer}
+              onDelete={removeCard}
+              onEdit={editCard} />
+            )}
+        </div>
+      </header>
     </div>
     );
 };
+
+const Library = () => {
+  //Should fetch from database at first, temp data for now
+  const [flashcardData, setFlashcardData] = useState({
+    "cardSets": [
+      [{   id:1, question: "What is the capital of France?", answer: "Paris"}, 
+      {   id:2, question: "What is the capital of Germany?", answer: "Berlin"},
+      {   id:3, question: "What is the capital of Italy?", answer: "Rome"}],
+
+      [{   id:4, question: "Does this work?", answer: "YES!"}, 
+      {   id:5, question: "Are we good?", answer: "YES!"},
+      {   id:6, question: "Are we sane?", answer: "NO!"}]
+    ],
+    "message": "hello"
+  });
+
+  const handleAddingFlashcardSet = () => {
+    //TODO add functionality to add set to cards & fetch
+  }
+  const handleRemovingFlashcardSet = () => {
+    //TODO remove flashcard set & fetch
+
+  }
+
+  return (
+    <div>
+      <div className="sortingBar">
+        <SortingBar />
+        <AddFlashcardSetButton onAdd={handleAddingFlashcardSet} />
+      </div>
+    {flashcardData.cardSets.map(
+        (flashCardSets, index) => (
+          <FlashCardSet key={index} flashcardData={flashCardSets}/>
+        )
+      )}
+    </div>
+  )
+}
 
 //TODO: Add way to add flashcards
 

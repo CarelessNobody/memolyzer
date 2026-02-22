@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { useFetch, successNotification } from './utils';
+import { useFetch, successNotification, failureNotification, setUserId } from './utils';
 import { Header, Footer } from './headfooter'
 import './index.css'
 import './registration.css'
@@ -24,6 +24,7 @@ const Registration = () => {
 
     if (error) {
         console.error("Registration error:", error);
+        failureNotification("Registration unsuccessful: ", error)
     } else if (data) {
         console.log("Registration successful:", data);
         successNotification("Registration successful!");
@@ -61,9 +62,11 @@ const Login = () => {
 
     if (error) {
         console.error("Login error:", error);
+        failureNotification("Login unsuccessful: ", error)
     } else if (data) {
         console.log("Login successful:", data);
-        successNotification("Login successful!");
+        successNotification("Login successful! Welcome ", data.user.username);
+        setUserId(data.user.id);
     }
 
     return (

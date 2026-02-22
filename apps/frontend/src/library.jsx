@@ -7,8 +7,8 @@ import React from 'react';
 import './index.css'
 import './library.css'
 
-import close from './assets/close.png'
-import edit from './assets/edit.png'
+import close from './assets/close.webp'
+import edit from './assets/edit.webp'
 
 //Should fetch from database at first, temp data for now
 const flashcardData = [

@@ -77,11 +77,11 @@ const createNotification = (className, message, duration = 3000) => {
     }, duration)
 }
 
-export function successNotification(message, duration = 3000) {
+export function successNotification(message, duration = 5000) {
     createNotification("success-notification", message, duration);
 }
 
-export function failureNotification(message, duration = 3000) {
+export function failureNotification(message, duration = 5000) {
     createNotification("failure-notification", message, duration);
 }
 

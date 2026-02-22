@@ -40,6 +40,12 @@ export const useFetchWithFile = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const resetState = () => {
+    setData(null);
+    setError(null);
+    setLoading(true);
+  }
+
   const fetchUrl = async ({ url, method, body }) => {
     setError(null);
     setLoading(true);
@@ -63,7 +69,7 @@ export const useFetchWithFile = () => {
     }
   };
 
-  return { fetchUrl, data, isLoading, error };
+  return { fetchUrl, data, isLoading, error, resetState };
 }
 
 const createNotification = (className, message, duration = 3000) => {

@@ -92,6 +92,10 @@
   font-size: 15px;
 }
 
+.flashcardSet {
+  padding: 30px;
+}
+
 .flashcardContainer {
   display: flex;
   flex-wrap: wrap;
@@ -194,6 +198,12 @@
   justify-content: flex-start;
   margin-top: 50px;
   gap: 1rem;
+}
+
+.leftDescBox {
+  background-color: var(--lightblue);
+  padding: 8px;
+  border-radius: 8px;
 }
 
 .flashcardName{

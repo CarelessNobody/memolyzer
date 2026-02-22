@@ -1,23 +1,25 @@
 // const { generateFlashcards } = require('./gemini.js'); 
 // const path = require('path');
 
-// // async function runTest() {
-// //     const testFilePath =  "C:\\Users\\weng2\\OneDrive\\Desktop\\School Work\\UF 26' Spring\\Inter Micro\\Microeconomics.pdf"
+// async function runTest() {
+//     // const testFilePath =  "C:\\Users\\weng2\\OneDrive\\Desktop\\School Work\\UF 26' Spring\\Inter Micro\\Microeconomics.pdf"
 
-// //     console.log(`--- Starting Test ---`);
-// //     console.log(`Target File: ${testFilePath}`);
+//     const testFilePath = "C:\\Users\\weng2\\OneDrive\\Desktop\\School Work\\Resume.pdf"
 
-// //     try {
-// //         const flashcards = await generateFlashcards(testFilePath);
+//     console.log(`--- Starting Test ---`);
+//     console.log(`Target File: ${testFilePath}`);
+
+//     try {
+//         const flashcards = await generateFlashcards(testFilePath);
         
-// //         console.log('\n--- Success! Generated Flashcards ---');
-// //         console.log(JSON.stringify(flashcards, null, 2));
+//         console.log('\n--- Success! Generated Flashcards ---');
+//         console.log(JSON.stringify(flashcards, null, 2));
     
-// //         console.log(`\nTotal Flashcards: ${flashcards.length}`);
-// //     } catch (error) {
-// //         console.error('\n--- Test Failed ---');
-// //         console.error(error.message);
-// //     }
-// // }
+//         console.log(`\nTotal Flashcards: ${flashcards.length}`);
+//     } catch (error) {
+//         console.error('\n--- Test Failed ---');
+//         console.error(error.message);
+//     }
+// }
 
-// // runTest();
+// runTest();

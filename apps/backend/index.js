@@ -17,6 +17,9 @@ app.use(fileUpload());
 app.use(cors());
 app.use(express.json());
 
+const { generateFlashcards } = require('./gemini.js'); 
+
+
 app.get("/api/test", (req, res) => {
   res.send({ id: 1, test: "This is a test response from the backend!" });
 });
@@ -49,12 +52,33 @@ app.post("/api/user/login", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 app.post("/api/flashcard", (req, res) => {
-  res.send({ message: "This should create flashcard based on data", data: req.body });
+  // res.send({ message: "This should create flashcard based on data", data: req.body });
+  //res.send({ message: "File uploaded successfully", fileName: req.files.uploadFile.name });
+
 });
 
-app.post("/api/flashcard/uploadGemini", (req, res) => {
-  res.send({ message: "This should process the uploaded file and return flashcard data", fileName: req.files.uploadFile.name });
+app.post("/api/flashcard/uploadGemini", async(req, res) => {
+  res.send({ message: "File Received Successfully! Flashcards forming now....", fileName: req.files.uploadFile.name });
+  try {
+
+    const uploadFile = req.files.uploadFile;
+    const tempPath = `uploads/${uploadFile.name}`;
+
+    await uploadFile.mv(tempPath);
+
+    const flashcards = await generateFlashcards(tempPath);
+    // console.log('\n--- Success! Generated Flashcards ---');
+    // console.log(JSON.stringify(flashcards, null, 2));
+    // console.log(`\nTotal Flashcards: ${flashcards.length}`);
+    res.status(200).json({ flashcards, count: flashcards.length });
+    fs.unlinkSync(tempPath);
+
+    } catch (error) {
+        console.error('\n--- Test Failed ---');
+        console.error(error.message);
+    }
 });
 
 app.route("/api/flashcard/:id")

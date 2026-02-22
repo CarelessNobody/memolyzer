@@ -51,6 +51,14 @@ const SortingBar = () => {
     );
 }
 
+const AddFlashcardSetButton = ({ onAdd }) => {
+  return (
+    <button className="addCardButton" onClick={onAdd}>
+      Add a Flashcard set!
+    </button>
+  )
+}
+
 const AddCardButton = ({ onAdd }) => {
   const handleAdd = () => {
     const front = prompt("Enter front text:");
@@ -62,7 +70,7 @@ const AddCardButton = ({ onAdd }) => {
 
   return (
     <button className="addCardButton" onClick={handleAdd}>
-      Add Flashcard
+      Add a Flashcard!
     </button>
   )
 }
@@ -108,8 +116,7 @@ function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
   )
 }
 
-function FileDropzone() {
-  const {fetchUrl, data, isLoading, error } = useFetchWithFile();
+function FileDropzone({fetchUrl}) {
   const onDrop = useCallback(async acceptedFiles => {
     const file = acceptedFiles[0];
     const formData = new FormData();
@@ -123,17 +130,11 @@ function FileDropzone() {
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-    if (data) {
-      console.log("File upload successful:", data);
-    } else if (error) {
-      console.error("File upload error:", error);
-    }
-
   return (
     <div className="dropzoneContainer">
       <div className="fileDropzone" {...getRootProps()} style={{ border: isDragActive ? "2px solid #00e676" : "2px dashed #ccc", padding: "40px" }}>
         <input {...getInputProps()} />
-        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click to add a new flashcard!</p>}
+        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click to make a flashcard set based on the pdf!</p>}
       </div>
     </div>
   );
@@ -159,17 +160,15 @@ const FlashCardSet = ({flashcardData}) => {
     }
 
     return (    
-    <div>
-      <div className="sortingBar">
-        <SortingBar />
-        <AddCardButton onAdd={addCard} />
-      </div>
-      <FileDropzone />
+    <div className="flashcardSet">
       <header>
         <div className= "cardbox">
           <div className = "descBox">
-            <div className = "flashcardName">
-              <input type="text" placeholder="Enter Flashcard Name"/>
+            <div className="leftDescBox">
+              <div className = "flashcardName">
+                <input type="text" placeholder="Enter Flashcard Name"/>
+              </div>
+              <AddCardButton onAdd={addCard} />
             </div>
             <div className = "flashcardDesc">
               <textarea id = "message" name = "message" rows="10" cols="90">
@@ -193,7 +192,7 @@ const FlashCardSet = ({flashcardData}) => {
 
 const Library = () => {
   //Should fetch from database at first, temp data for now
-  const flashcardData = {
+  const [flashcardData, setFlashcardData] = useState({
     "cardSets": [
       [{   id:1, question: "What is the capital of France?", answer: "Paris"}, 
       {   id:2, question: "What is the capital of Germany?", answer: "Berlin"},
@@ -204,10 +203,33 @@ const Library = () => {
       {   id:6, question: "Are we sane?", answer: "NO!"}]
     ],
     "message": "hello"
-  };
+  });
+  const {fetchUrl, data, isLoading, error, resetState } = useFetchWithFile(); //For drag & drop
+
+  const handleAddingFlashcardSet = () => {
+    //TODO add functionality to add set to cards & fetch
+  }
+  const handleRemovingFlashcardSet = () => {
+    //TODO remove flashcard set & fetch
+
+  }
+
+  if (error) {
+    console.error("Error fetching flashcard data:", error);
+    resetState(); // Reset state to allow for retrying
+    return <div>Error loading flashcards.</div>;
+  } else if (data) {
+    console.log("Fetched flashcard data:", data);
+    resetState(); // Clear data after successful fetch to prevent repeated updates
+  }
 
   return (
     <div>
+      <div className="sortingBar">
+        <SortingBar />
+        <AddFlashcardSetButton onAdd={handleAddingFlashcardSet} />
+      </div>
+      <FileDropzone fetchUrl={fetchUrl}/>
     {flashcardData.cardSets.map(
         (flashCardSets, index) => (
           <FlashCardSet key={index} flashcardData={flashCardSets}/>

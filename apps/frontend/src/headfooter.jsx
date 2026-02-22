@@ -1,4 +1,17 @@
+import { useFetch, successNotification, failureNotification, getUserId } from './utils';
 export const Header = () => {
+  const userId = getUserId();
+  
+  const handleAuth = (e) => {
+    if (userId) {
+      localStorage.removeItem('userID');
+      window.location.reload();
+    } 
+    else {
+      window.location.href = 'registration.html';
+    }
+  };
+
   return (
     <header className="navbar">
       <div className="navbox">
@@ -19,11 +32,9 @@ export const Header = () => {
             <li className="nav-item">
               <a href="library.html">Your Library</a>
             </li>
-            {/* <li className="nav-item">
-              <a href="stats.html">Stats</a>
-            </li> */}
             <li className="nav-item">
-              <a href="registration.html">Login</a>
+              {userId ? (<button onClick={handleAuth}>Log out</button>):
+              (<a href="registration.html">Log in</a>)}
             </li>
           </ul>
         </nav>

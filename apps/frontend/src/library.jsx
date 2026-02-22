@@ -6,7 +6,6 @@ import { useFetchWithFile } from './utils'
 import React from 'react';
 import './index.css'
 import './library.css'
-
 import close from './assets/close.webp'
 import edit from './assets/edit.webp'
 
@@ -41,21 +40,21 @@ const SortingBar = () => {
   };
 
     return (
-        <div className="sortingBar">
-            <div className="searchBar">
-                <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
-            </div>
-            <div className = "sortGroup">
-              <div className="sortOption">
-                <label htmlFor="publicFilter" className="sortLabel">Public</label>
-                <input id="publicFilter" type="checkBox" checked={showPublic} onChange={handlePublicChange}></input>
-              </div>
-              <div className="sortOption">
-                <label htmlFor="privateFilter" className="sortLabel">Private</label>
-                <input id="privateFilter" type="checkBox" checked={showPrivate} onChange={handlePrivateChange}></input>
-              </div>
-            </div>
+      <>
+        <div className="searchBar">
+            <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
         </div>
+        <div className = "sortGroup">
+          <div className="sortOption">
+            <label htmlFor="publicFilter" className="sortLabel">Public</label>
+            <input id="publicFilter" type="checkBox" checked={showPublic} onChange={handlePublicChange}></input>
+          </div>
+          <div className="sortOption">
+            <label htmlFor="privateFilter" className="sortLabel">Private</label>
+            <input id="privateFilter" type="checkBox" checked={showPrivate} onChange={handlePrivateChange}></input>
+          </div>
+        </div>
+      </>
     );
 }
 
@@ -77,19 +76,15 @@ const AddCardButton = ({ onAdd }) => {
 
 function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
   const [isFlipped, setIsFlipped] = React.useState(false);
-
   function flipCard(){
     setIsFlipped(!isFlipped);
   }
-
   function handleDelete(e){
     e.stopPropagation(); //Tops card flipping
     if (onDelete) onDelete(id);
   }
-
   function handleEdit(e){
     e.stopPropagation();
-
     //Temp testing
     const newFront = prompt("Enter new front text:", cardfront);
     const newBack = prompt("Enter new back text:", cardback);
@@ -172,23 +167,33 @@ const Library = () => {
 
     return (    
     <div>
-      <div className="topBar">
+      <div className="sortingBar">
         <SortingBar />
         <AddCardButton onAdd={addCard} />
       </div>
-      
-      <div className= "cardbox">
-        {cards.map(flashcard => 
-          <FlashCardsMaker 
-            key={flashcard.id} 
-            id={flashcard.id}
-            cardfront={flashcard.question} 
-            cardback={flashcard.answer}
-            onDelete={removeCard}
-            onEdit={editCard} />
-          )}
-      </div>
       <FileDropzone />
+      <header>
+        <div className= "cardbox">
+          <div className = "descBox">
+            <div className = "flashcardName">
+              <input type="text" placeholder="Enter Flashcard Name"/>
+            </div>
+            <div className = "flashcardDesc">
+              <textarea id = "message" name = "message" rows="10" cols="90">
+              </textarea>
+            </div>
+          </div>
+          {cards.map(flashcard => 
+            <FlashCardsMaker 
+              key={flashcard.id} 
+              id={flashcard.id}
+              cardfront={flashcard.question} 
+              cardback={flashcard.answer}
+              onDelete={removeCard}
+              onEdit={editCard} />
+            )}
+        </div>
+      </header>
     </div>
     );
 };

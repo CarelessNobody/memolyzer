@@ -3,10 +3,26 @@
   text-align: center;
 }
 
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90vw;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+}
+
+.addCardButton {
+  background-color: var(--darkblue);
+  color: var(--background);
+  cursor: pointer;
+  width: 200px;
+  height: 50px;
+}
+
 .sortingBar {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
   width: 1250px;
   background-color: var(--lightblue);
   padding: 1rem;

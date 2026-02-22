@@ -23,16 +23,19 @@ const SortingBar = () => {
   const [showPrivate, setShowPrivate] = useState(true);
 
   const handleSearchChange = (event) => {
+    //TODO: Implement search functionality
     setSearchTerm(event.target.value);
     console.log("Search term:", event.target.value);
   };
 
   const handlePublicChange = () => {
+    //TODO: Implement public/private filter functionality
     setShowPublic(!showPublic);
     console.log("Show public:", !showPublic);
   };
 
   const handlePrivateChange = () => {
+    //TODO: Implement public/private filter functionality
     setShowPrivate(!showPrivate);
     console.log("Show private:", !showPrivate);
   };
@@ -54,6 +57,22 @@ const SortingBar = () => {
             </div>
         </div>
     );
+}
+
+const AddCardButton = ({ onAdd }) => {
+  const handleAdd = () => {
+    const front = prompt("Enter front text:");
+    const back = prompt("Enter back text:");
+    if (front !== null && back !== null) {
+      onAdd(front, back);
+    }
+  };
+
+  return (
+    <button className="addCardButton" onClick={handleAdd}>
+      Add Flashcard
+    </button>
+  )
 }
 
 function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
@@ -126,7 +145,7 @@ function FileDropzone() {
     <div className="dropzoneContainer">
       <div className="fileDropzone" {...getRootProps()} style={{ border: isDragActive ? "2px solid #00e676" : "2px dashed #ccc", padding: "40px" }}>
         <input {...getInputProps()} />
-        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click</p>}
+        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click to add a new flashcard!</p>}
       </div>
     </div>
   );
@@ -145,17 +164,31 @@ const Library = () => {
       setCards(prev => prev.map(c => c.id === id ? { ...c, question: newFront, answer: newBack } : c));
     };
 
+    const addCard = (front, back) => {
+      //Should also add to database, temp for now
+      const newCard = { id: Date.now(), question: front, answer: back };
+      setCards(prev => [...prev, newCard]);
+    }
+
     return (    
-    <div className= "cardbox">
-      {cards.map(flashcard => 
-        <FlashCardsMaker 
-          key={flashcard.id} 
-          id={flashcard.id}
-          cardfront={flashcard.question} 
-          cardback={flashcard.answer}
-          onDelete={removeCard}
-          onEdit={editCard} />
-        )}
+    <div>
+      <div className="topBar">
+        <SortingBar />
+        <AddCardButton onAdd={addCard} />
+      </div>
+      
+      <div className= "cardbox">
+        {cards.map(flashcard => 
+          <FlashCardsMaker 
+            key={flashcard.id} 
+            id={flashcard.id}
+            cardfront={flashcard.question} 
+            cardback={flashcard.answer}
+            onDelete={removeCard}
+            onEdit={editCard} />
+          )}
+      </div>
+      <FileDropzone />
     </div>
     );
 };
@@ -165,9 +198,7 @@ const Library = () => {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header />
-    <SortingBar />
     <Library />
-    <FileDropzone />
     <Footer />
   </StrictMode>,
 )

@@ -6,6 +6,9 @@ const cors = require("cors");
 
 require("dotenv").config();
 
+//Needs to be imported after dotenv config to ensure MONGO_URI is available
+const { connectToMongo } = require('./connection');
+
 const app = express();
 app.use(fileUpload());
 app.use(cors());
@@ -44,5 +47,6 @@ app.route("/api/flashcard/:id")
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
+  connectToMongo().catch(console.error);
   console.log(`Server running on port ${PORT}`);
 });

@@ -6,7 +6,7 @@ import './index.css'
 import './registration.css'
 
 const Registration = () => {
-  const {fetchUrl, data, isLoading, error } = useFetch();
+  const {fetchUrl, data, isLoading, error, resetState } = useFetch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,9 +25,11 @@ const Registration = () => {
     if (error) {
         console.error("Registration error:", error);
         failureNotification("Registration unsuccessful: ", error)
+        resetState();
     } else if (data) {
         console.log("Registration successful:", data);
         successNotification("Registration successful!");
+        resetState();
     }
 
   return (
@@ -45,7 +47,7 @@ const Registration = () => {
 };
 
 const Login = () => {
-    const {fetchUrl, data, isLoading, error } = useFetch();
+    const { fetchUrl, data, isLoading, error, resetState } = useFetch();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -53,7 +55,7 @@ const Login = () => {
         await fetchUrl({
             url: '/user/login',
             method: 'POST',
-            body : {
+            body: {
                 email: e.target.elements.email.value,
                 password: e.target.elements.password.value
             }
@@ -62,22 +64,28 @@ const Login = () => {
 
     if (error) {
         console.error("Login error:", error);
-        failureNotification("Login unsuccessful: ", error)
+        failureNotification("Login unsuccessful: " + error.message);
+        resetState();
     } else if (data) {
         console.log("Login successful:", data);
-        successNotification("Login successful! Welcome ", data.user?.username);
-        setUserId(data.user?.id);
+        setUserId(data.user.id);  // Set user ID in localStorage
+        successNotification(`Login successful! Welcome, ${data.user.username}`);
+
+        // Delay state reset to let the notification show
+        setTimeout(() => {
+            resetState();
+        }, 5000);
     }
 
     return (
-    <form className="login-form" onSubmit={handleLogin}>
-        <h1>Login</h1>
-        <p className = "form-label">Email</p>
-        <input type="email" name="email" placeholder="Email" />
-        <p className = "form-label">Password</p>
-        <input type="password" name="password" placeholder="Password" />
-        <button>Submit</button>
-    </form>
+        <form className="login-form" onSubmit={handleLogin}>
+            <h1>Login</h1>
+            <p className="form-label">Email</p>
+            <input type="email" name="email" placeholder="Email" />
+            <p className="form-label">Password</p>
+            <input type="password" name="password" placeholder="Password" />
+            <button>Submit</button>
+        </form>
     );
 };
 

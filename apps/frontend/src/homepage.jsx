@@ -15,9 +15,12 @@ const DeveloperCard = ({ img, name, role, description }) => {
 }
 
 const developmentTeam = [
-    { img: ariya, name: "Ariya Mouthapong", role: "Frontend Developer", description: "temp description" },
-    { img: ayushi, name: "Ayushi Srivastava", role: "Backend Developer", description: "temp description" },
-    { img: ruihan, name: "Ruihan Weng", role: "Full Stack Developer", description: "temp description" }
+    { img: ariya, name: "Ariya Mouthapong", role: 
+        "Frontend Developer", description: "Hi, this is my first time trying to use React and im slowly getting the hang of CSS!" },
+    { img: ayushi, name: "Ayushi Srivastava", role: "Backend Developer",
+         description: "Hi guys! This is my first time using MongoDB and I had lots of fun trying to learn new things!" },
+    { img: ruihan, name: "Ruihan Weng", role: "Full Stack Developer", 
+        description: "Hello! This is my first time using React and I am very excited to learn more!" }
 ];
 
 export const Homepage = () => {

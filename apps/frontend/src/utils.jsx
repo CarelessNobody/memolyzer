@@ -85,3 +85,11 @@ export function failureNotification(message, duration = 3000) {
     createNotification("failure-notification", message, duration);
 }
 
+export const getUserId = () => {
+  const id = localStorage.getItem('userID');
+  return id;
+};
+
+export const setUserId = (id) => {
+  localStorage.setItem('userID', id);
+}

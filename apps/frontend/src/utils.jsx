@@ -8,6 +8,12 @@ export const useFetch = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const resetState = () => {
+    setData(null);
+    setError(null);
+    setLoading(true);
+  }
+
   const fetchUrl = async ({ url, method, body }) => {
     setError(null);
     setLoading(true);
@@ -23,6 +29,7 @@ export const useFetch = () => {
 
       const json = await res.json();
       setData(json);
+      return json;
     } catch (err) {
       setError(err);
       setData(null);
@@ -32,21 +39,21 @@ export const useFetch = () => {
     }
   };
 
-  return {fetchUrl, data, isLoading, error };
+  return {fetchUrl, data, isLoading, error, resetState };
 };
 
 export const useFetchWithFile = () => {
-  const [data, setData] = useState(null);
-  const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [fileData, setData] = useState(null);
+  const [fileIsLoading, setLoading] = useState(true);
+  const [fileError, setError] = useState(null);
 
-  const resetState = () => {
+  const fileResetState = () => {
     setData(null);
     setError(null);
     setLoading(true);
   }
 
-  const fetchUrl = async ({ url, method, body }) => {
+  const fileFetchUrl = async ({ url, method, body }) => {
     setError(null);
     setLoading(true);
     try {
@@ -60,6 +67,7 @@ export const useFetchWithFile = () => {
 
       const json = await res.json();
       setData(json);
+      return json;
     } catch (err) {
       setError(err);
       setData(null);
@@ -69,7 +77,7 @@ export const useFetchWithFile = () => {
     }
   };
 
-  return { fetchUrl, data, isLoading, error, resetState };
+  return { fileFetchUrl, fileData, fileIsLoading, fileError, fileResetState };
 }
 
 const createNotification = (className, message, duration = 3000) => {

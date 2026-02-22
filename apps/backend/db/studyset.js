@@ -15,9 +15,8 @@ const flashcardSchema = new Schema({
 const studysetSchema = new Schema({
     isPublic: { type: Boolean, default: false },
     flashcards: { type: [flashcardSchema], default: [] },
-    dateCreated: { type: Date, default: Date.now },
-    creator: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // link to your User model
-    description: { type: String, default: '' }
+    creator: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    description: { type: String, default: '' },
 });
 
 module.exports = mongoose.model('StudySet', studysetSchema);

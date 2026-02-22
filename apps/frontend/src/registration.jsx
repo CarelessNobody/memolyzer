@@ -6,7 +6,7 @@ import './index.css'
 import './registration.css'
 
 const Registration = () => {
-  const {fetchUrl, data, isLoading, error } = useFetch();
+  const {fetchUrl, data, isLoading, error, resetState } = useFetch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,9 +25,11 @@ const Registration = () => {
     if (error) {
         console.error("Registration error:", error);
         failureNotification("Registration unsuccessful: ", error)
+        resetState();
     } else if (data) {
         console.log("Registration successful:", data);
         successNotification("Registration successful!");
+        resetState();
     }
 
   return (
@@ -45,7 +47,7 @@ const Registration = () => {
 };
 
 const Login = () => {
-    const {fetchUrl, data, isLoading, error } = useFetch();
+    const {fetchUrl, data, isLoading, error, resetState } = useFetch();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -63,12 +65,12 @@ const Login = () => {
     if (error) {
         console.error("Login error:", error);
         failureNotification("Login unsuccessful: ", error)
+        resetState();
     } else if (data) {
         console.log("Login successful:", data);
-        successNotification("Login successful! Welcome ", data.user.username);
         setUserId(data.user.id);
-        
-        
+        successNotification("Login successful! Welcome ", data.user.username);
+        resetState();
     }
 
     return (

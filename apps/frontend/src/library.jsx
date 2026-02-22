@@ -1,8 +1,8 @@
-import { StrictMode, useState, useCallback } from 'react'
+import { StrictMode, useState, useCallback, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Header, Footer } from './headfooter'
 import { useDropzone } from 'react-dropzone';
-import { useFetchWithFile } from './utils'
+import { getUserId, useFetch, useFetchWithFile } from './utils'
 import React from 'react';
 import './index.css'
 import './library.css'
@@ -140,24 +140,53 @@ function FileDropzone({fetchUrl}) {
   );
 }
 
-const FlashCardSet = ({flashcardData}) => {
+const FlashCardSet = ({flashcardData, studysetId}) => {
     const [cards, setCards] = useState(flashcardData);
+    const {fetchUrl, data, isLoading, error, resetState} = useFetch();
 
-    const removeCard = (id) => {
-      //Should also delete from database, temp for now
-      setCards(prev => prev.filter(c => c.id !== id));
+  // Helper: sync entire card array to backend
+  const syncToBackend = async (updatedCards) => {
+    const userId = getUserId();
+    await fetchUrl({
+      url: `/flashcard/${userId}/${studysetId}`,
+      method: 'PUT',
+      body: {
+        flashcards: updatedCards.map(c => ({
+          question: c.question,
+          answer: c.answer
+        }))
+      }
+    });
+  };
+
+  const removeCard = async (id) => {
+    const updated = cards.filter(c => c.id !== id);
+    setCards(updated);
+    await syncToBackend(updated);
+  };
+
+  const editCard = async (id, newFront, newBack) => {
+    const updated = cards.map(c =>
+      c.id === id
+        ? { ...c, question: newFront, answer: newBack }
+        : c
+    );
+
+    setCards(updated);
+    await syncToBackend(updated);
+  };
+
+  const addCard = async (front, back) => {
+    const newCard = {
+      id: Date.now().toString(),
+      question: front,
+      answer: back
     };
 
-    const editCard = (id, newFront, newBack) => {
-      //Should also update database, temp for now
-      setCards(prev => prev.map(c => c.id === id ? { ...c, question: newFront, answer: newBack } : c));
-    };
-
-    const addCard = (front, back) => {
-      //Should also add to database, temp for now
-      const newCard = { id: Date.now(), question: front, answer: back };
-      setCards(prev => [...prev, newCard]);
-    }
+    const updated = [...cards, newCard];
+    setCards(updated);
+    await syncToBackend(updated);
+  };
 
     return (    
     <div className="flashcardSet">
@@ -175,52 +204,119 @@ const FlashCardSet = ({flashcardData}) => {
               </textarea>
             </div>
           </div>
-          {cards.map(flashcard => 
-            <FlashCardsMaker 
-              key={flashcard.id} 
-              id={flashcard.id}
-              cardfront={flashcard.question} 
-              cardback={flashcard.answer}
-              onDelete={removeCard}
-              onEdit={editCard} />
-            )}
+          
+{cards.map(card => (
+          <FlashCardsMaker
+            key={card.id}
+            id={card.id}
+            cardfront={card.question}
+            cardback={card.answer}
+            onDelete={removeCard}
+            onEdit={editCard}
+          />
+        ))}
+
         </div>
       </header>
     </div>
     );
 };
 
-const Library = () => {
-  //Should fetch from database at first, temp data for now
+const useLoadFlashcardSets = () => {
+  const { fetchUrl } = useFetch();
   const [flashcardData, setFlashcardData] = useState({
-    "cardSets": [
-      [{   id:1, question: "What is the capital of France?", answer: "Paris"}, 
-      {   id:2, question: "What is the capital of Germany?", answer: "Berlin"},
-      {   id:3, question: "What is the capital of Italy?", answer: "Rome"}],
-
-      [{   id:4, question: "Does this work?", answer: "YES!"}, 
-      {   id:5, question: "Are we good?", answer: "YES!"},
-      {   id:6, question: "Are we sane?", answer: "NO!"}]
-    ],
-    "message": "hello"
+    cardSets: [],
   });
-  const {fetchUrl, data, isLoading, error, resetState } = useFetchWithFile(); //For drag & drop
 
-  const handleAddingFlashcardSet = () => {
-    //TODO add functionality to add set to cards & fetch
-  }
-  const handleRemovingFlashcardSet = () => {
+  useEffect(() => {
+    const loadStudySets = async () => {
+      const userId = getUserId();
+      if (!userId) return;
+
+      try {
+        const result = await fetchUrl({
+          url: `/flashcard/${userId}`,
+          method: 'GET',
+        });
+
+        const studysets = Array.isArray(result?.studysets)
+          ? result.studysets
+          : [];
+
+        const cardSets = studysets.map(set => ({
+          studysetId: set._id,
+          cards: (Array.isArray(set.flashcards) ? set.flashcards : []).map((c, i) => ({
+            id: `${set._id}_${i}`,
+            question: c.question,
+            answer: c.answer,
+          }))
+        }));
+
+        setFlashcardData({ cardSets });
+
+      } catch (err) {
+        console.error('Failed to load studysets', err);
+      }
+    };
+
+    loadStudySets();
+  }, []);
+
+  return { flashcardData, setFlashcardData };
+};
+
+
+const Library = () => {
+  const {fileFetchUrl, fileData, fileIsLoading, fileError, fileResetState } = useFetchWithFile(); //For drag & drop
+  const {fetchUrl, data, isLoading, error, resetState} = useFetch();
+  const {flashcardData, setFlashcardData} = useLoadFlashcardSets();
+
+  const handleAddingFlashcardSet = useCallback(async () => {
+    const userId = getUserId();
+
+    if (!userId) {
+      alert("PLEASE SIGN IN FOR FUNCTIONALITY");
+      return;
+    }
+
+    try {
+      const result = await fetchUrl({
+        url: '/flashcard/' + userId,
+        method: 'POST',
+      });
+
+      // Result contains `studyset` and `user`
+      const studyset = result?.studyset;
+      const cards = Array.isArray(studyset?.flashcards) ? studyset.flashcards : [];
+
+      const mapped = cards.map((c, i) => ({ id: `${studyset._id}_${i}`, question: c.question, answer: c.answer }));
+
+      setFlashcardData(prev => ({ ...prev, cardSets: [...prev.cardSets, mapped] }));
+    } catch (err) {
+      console.error('Failed to add studyset', err);
+      alert('Failed to add studyset');
+    }
+  }, []);
+
+  const handleRemovingFlashcardSet = async () => {
     //TODO remove flashcard set & fetch
 
   }
 
+  if (fileError) {
+    console.error("Error fetching flashcard data:", fileError);
+    fileResetState(); // Reset state to allow for retrying
+  } else if (fileData) {
+    console.log("Fetched flashcard data:", fileData);
+    fileResetState(); // Clear data after successful fetch to prevent repeated updates
+  }
+
   if (error) {
-    console.error("Error fetching flashcard data:", error);
-    resetState(); // Reset state to allow for retrying
-    return <div>Error loading flashcards.</div>;
+    console.error("Error fetching user flashcard sets");
+    resetState();
   } else if (data) {
-    console.log("Fetched flashcard data:", data);
-    resetState(); // Clear data after successful fetch to prevent repeated updates
+    console.log("Fetched user flashcard sets successfully" + data?.studyset);
+    resetState();
   }
 
   return (
@@ -229,17 +325,15 @@ const Library = () => {
         <SortingBar />
         <AddFlashcardSetButton onAdd={handleAddingFlashcardSet} />
       </div>
-      <FileDropzone fetchUrl={fetchUrl}/>
+      <FileDropzone fetchUrl={fileFetchUrl}/>
     {flashcardData.cardSets.map(
         (flashCardSets, index) => (
-          <FlashCardSet key={index} flashcardData={flashCardSets}/>
+          <FlashCardSet key={index} flashcardData={flashCardSets.cards} studysetId={flashCardSets.studysetId}/>
         )
       )}
     </div>
   )
 }
-
-//TODO: Add way to add flashcards
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

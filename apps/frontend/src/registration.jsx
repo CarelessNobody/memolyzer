@@ -65,8 +65,8 @@ const Login = () => {
         failureNotification("Login unsuccessful: ", error)
     } else if (data) {
         console.log("Login successful:", data);
-        successNotification("Login successful! Welcome ", data.username);
-        setUserId(data.id);
+        successNotification("Login successful! Welcome ", data.user.username);
+        setUserId(data.user.id);
     }
 
     return (

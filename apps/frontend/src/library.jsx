@@ -137,6 +137,7 @@ function FileDropzone() {
 
     if (data) {
       console.log("File upload successful:", data);
+
     } else if (error) {
       console.error("File upload error:", error);
     }

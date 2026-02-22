@@ -7,16 +7,14 @@ const ai = new GoogleGenAI({apiKey: API_KEY});
 async function generateFlashcards(filepath) {
     // uploading file based on the user's pdf
     const path = require('path');
-    // Read file into a Buffer so the SDK can access `.slice` and `.length`
+
+    // Read file into a Buffer 
     const buffer = fs.readFileSync(filepath);
     const stats = fs.statSync(filepath);
-
-    // Some SDKs expect a File-like object with `size` and `slice`.
     const fileLike = {
         name: path.basename(filepath),
         size: buffer.length,
         slice: (start, end) => buffer.slice(start, end),
-        // provide a stream if SDK uses it
         stream: () => require('stream').Readable.from(buffer)
     };
 
@@ -34,7 +32,7 @@ async function generateFlashcards(filepath) {
     while (getFile.state === 'PROCESSING') {
         getFile = await ai.files.get({ name: file.name });
         console.log(`current file status: ${getFile.state}`);
-        console.log('File is still processing, retrying in 5 seconds');
+        console.log('File is still processing');
 
         await new Promise((resolve) => {
             setTimeout(resolve, 5000);
@@ -52,7 +50,7 @@ async function generateFlashcards(filepath) {
                     role: 'user',
                     parts: [
                         { fileData: { fileUri: file.uri, mimeType: file.mimeType } },
-                        { text: "Create 10 flashcards from this PDF. These flashcards consist of questions and answers that correlate to each other. Return a JSON array of objects with 'question' and 'answer' keys." }
+                        { text: "Create 10 flashcards from this PDF. These flashcards consist of questions and answers that correlate to each other. Return a JSON array of objects where the chronological order of the question would be the 'id' of the flashcard, and content would be represent in the 'question' and 'answer' keys." }
                     ]
                 }
             ],

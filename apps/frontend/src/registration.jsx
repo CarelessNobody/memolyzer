@@ -67,6 +67,8 @@ const Login = () => {
         console.log("Login successful:", data);
         successNotification("Login successful! Welcome ", data.user.username);
         setUserId(data.user.id);
+        
+        
     }
 
     return (

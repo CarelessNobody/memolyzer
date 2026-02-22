@@ -134,7 +134,7 @@ function FileDropzone({fetchUrl}) {
     <div className="dropzoneContainer">
       <div className="fileDropzone" {...getRootProps()} style={{ border: isDragActive ? "2px solid #00e676" : "2px dashed #ccc", padding: "40px" }}>
         <input {...getInputProps()} />
-        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click to add 10 new flashcards based on the pdf!</p>}
+        {isDragActive ? <p>Drop files here...</p> : <p>Drag & drop, or click to make a flashcard set based on the pdf!</p>}
       </div>
     </div>
   );
@@ -142,7 +142,6 @@ function FileDropzone({fetchUrl}) {
 
 const FlashCardSet = ({flashcardData}) => {
     const [cards, setCards] = useState(flashcardData);
-    const {fetchUrl, data, isLoading, error } = useFetchWithFile(); //For drag & drop
 
     const removeCard = (id) => {
       //Should also delete from database, temp for now
@@ -162,7 +161,6 @@ const FlashCardSet = ({flashcardData}) => {
 
     return (    
     <div className="flashcardSet">
-      <FileDropzone fetchUrl={fetchUrl}/>
       <header>
         <div className= "cardbox">
           <div className = "descBox">
@@ -206,6 +204,7 @@ const Library = () => {
     ],
     "message": "hello"
   });
+  const {fetchUrl, data, isLoading, error, resetState } = useFetchWithFile(); //For drag & drop
 
   const handleAddingFlashcardSet = () => {
     //TODO add functionality to add set to cards & fetch
@@ -215,12 +214,22 @@ const Library = () => {
 
   }
 
+  if (error) {
+    console.error("Error fetching flashcard data:", error);
+    resetState(); // Reset state to allow for retrying
+    return <div>Error loading flashcards.</div>;
+  } else if (data) {
+    console.log("Fetched flashcard data:", data);
+    resetState(); // Clear data after successful fetch to prevent repeated updates
+  }
+
   return (
     <div>
       <div className="sortingBar">
         <SortingBar />
         <AddFlashcardSetButton onAdd={handleAddingFlashcardSet} />
       </div>
+      <FileDropzone fetchUrl={fetchUrl}/>
     {flashcardData.cardSets.map(
         (flashCardSets, index) => (
           <FlashCardSet key={index} flashcardData={flashCardSets}/>

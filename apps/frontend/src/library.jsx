@@ -1,64 +1,64 @@
-import { StrictMode, useState, useCallback, useEffect } from 'react'
-import { createRoot } from 'react-dom/client'
-import { Header, Footer } from './headfooter'
+import { StrictMode, useState, useCallback, useRef, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Header, Footer } from './headfooter';
 import { useDropzone } from 'react-dropzone';
-import { getUserId, useFetch, useFetchWithFile } from './utils'
+import { getUserId, useFetch, useFetchWithFile } from './utils';
 import React from 'react';
-import './index.css'
-import './library.css'
-import close from './assets/close.webp'
-import edit from './assets/edit.webp'
+import './index.css';
+import './library.css';
+import close from './assets/close.webp';
+import edit from './assets/edit.webp';
 
+// Sorting bar component
 const SortingBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPublic, setShowPublic] = useState(true);
   const [showPrivate, setShowPrivate] = useState(true);
 
   const handleSearchChange = (event) => {
-    //TODO: Implement search functionality
     setSearchTerm(event.target.value);
     console.log("Search term:", event.target.value);
   };
 
   const handlePublicChange = () => {
-    //TODO: Implement public/private filter functionality
     setShowPublic(!showPublic);
     console.log("Show public:", !showPublic);
   };
 
   const handlePrivateChange = () => {
-    //TODO: Implement public/private filter functionality
     setShowPrivate(!showPrivate);
     console.log("Show private:", !showPrivate);
   };
 
-    return (
-      <>
-        <div className="searchBar">
-            <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
+  return (
+    <>
+      <div className="searchBar">
+        <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
+      </div>
+      <div className="sortGroup">
+        <div className="sortOption">
+          <label htmlFor="publicFilter" className="sortLabel">Public</label>
+          <input id="publicFilter" type="checkbox" checked={showPublic} onChange={handlePublicChange}></input>
         </div>
-        <div className = "sortGroup">
-          <div className="sortOption">
-            <label htmlFor="publicFilter" className="sortLabel">Public</label>
-            <input id="publicFilter" type="checkBox" checked={showPublic} onChange={handlePublicChange}></input>
-          </div>
-          <div className="sortOption">
-            <label htmlFor="privateFilter" className="sortLabel">Private</label>
-            <input id="privateFilter" type="checkBox" checked={showPrivate} onChange={handlePrivateChange}></input>
-          </div>
+        <div className="sortOption">
+          <label htmlFor="privateFilter" className="sortLabel">Private</label>
+          <input id="privateFilter" type="checkbox" checked={showPrivate} onChange={handlePrivateChange}></input>
         </div>
-      </>
-    );
-}
+      </div>
+    </>
+  );
+};
 
+// Flashcard set add button
 const AddFlashcardSetButton = ({ onAdd }) => {
   return (
     <button className="addCardButton" onClick={onAdd}>
       Add a Flashcard set!
     </button>
-  )
-}
+  );
+};
 
+// Add individual flashcard button
 const AddCardButton = ({ onAdd }) => {
   const handleAdd = () => {
     const front = prompt("Enter front text:");
@@ -72,21 +72,23 @@ const AddCardButton = ({ onAdd }) => {
     <button className="addCardButton" onClick={handleAdd}>
       Add a Flashcard!
     </button>
-  )
-}
+  );
+};
 
+// Flashcard component (front/back)
 function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
   const [isFlipped, setIsFlipped] = React.useState(false);
-  function flipCard(){
+  function flipCard() {
     setIsFlipped(!isFlipped);
   }
-  function handleDelete(e){
-    e.stopPropagation(); //Tops card flipping
+
+  function handleDelete(e) {
+    e.stopPropagation(); // Prevent card from flipping
     if (onDelete) onDelete(id);
   }
-  function handleEdit(e){
+
+  function handleEdit(e) {
     e.stopPropagation();
-    //Temp testing
     const newFront = prompt("Enter new front text:", cardfront);
     const newBack = prompt("Enter new back text:", cardback);
 
@@ -97,27 +99,27 @@ function FlashCardsMaker({ id, cardback, cardfront, onDelete, onEdit }) {
 
   const frontText = cardfront || '';
   const backText = cardback || '';
-  return(
-    <div className={`card ${isFlipped ? 'flipped' : ''}`} 
-    onClick={flipCard}> 
-      <div className="innercard"> 
-          <div className="top">
-              <img className="editIcon" src={edit} alt="Edit flashcard" onClick={handleEdit}/>
-              <img className="deleteIcon" src={close} alt="Delete flashcard" onClick={handleDelete}/>
-              <p>{frontText}</p>
-            </div>
-            <div className="bottom">
-              <img className="editIcon" src={edit} alt="Edit flashcard" onClick={handleEdit}/>
-              <img className="deleteIcon" src={close} alt="Delete" onClick={handleDelete}/>
-              <p>{backText}</p>
-            </div>
-      </div> 
+  return (
+    <div className={`card ${isFlipped ? 'flipped' : ''}`} onClick={flipCard}>
+      <div className="innercard">
+        <div className="top">
+          <img className="editIcon" src={edit} alt="Edit flashcard" onClick={handleEdit} />
+          <img className="deleteIcon" src={close} alt="Delete flashcard" onClick={handleDelete} />
+          <p>{frontText}</p>
+        </div>
+        <div className="bottom">
+          <img className="editIcon" src={edit} alt="Edit flashcard" onClick={handleEdit} />
+          <img className="deleteIcon" src={close} alt="Delete" onClick={handleDelete} />
+          <p>{backText}</p>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-function FileDropzone({fetchUrl}) {
-  const onDrop = useCallback(async acceptedFiles => {
+// File upload component
+function FileDropzone({ fetchUrl, isLoading, setFlashcardData }) {
+  const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
     const formData = new FormData();
     formData.append("uploadFile", file);
@@ -127,13 +129,52 @@ function FileDropzone({fetchUrl}) {
     const userId = getUserId();
     if (!userId) return alert("Please sign in!");
 
-    await fetchUrl({
-      url: '/flashcard/uploadGemini/' + userId, 
-      method: 'POST', 
-      body: formData 
-    });
-  }, []);
+    // Start the file upload and trigger loading state
+    try {
+      const result = await fetchUrl({
+        url: '/flashcard/uploadGemini/' + userId,
+        method: 'POST',
+        body: formData
+      });
+
+      // Once the file is uploaded, handle the result (assuming it returns flashcard data)
+      if (result && result.flashcards) {
+        const flashcards = result.flashcards.map((card, i) => ({
+          id: `${result.studysetId}_${i}`,
+          question: card.question,
+          answer: card.answer
+        }));
+
+        // Update the flashcard data
+        setFlashcardData(prev => ({
+          ...prev,
+          cardSets: [
+            ...prev.cardSets,
+            {
+              studysetId: result.studysetId,
+              cards: flashcards
+            }
+          ]
+        }));
+      }
+    } catch (err) {
+      console.error("Error during file upload:", err);
+    }
+  }, [fetchUrl, setFlashcardData]);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  // If the file is loading, display "Loading flashcards"
+  if (isLoading) {
+    return (
+      <div className="dropzoneContainer">
+        <div className="fileDropzone" {...getRootProps()} style={{ border: isDragActive ? "2px solid #00e676" : "2px dashed #ccc", padding: "40px" }}>
+          <input {...getInputProps()} />
+          <p>Loading flashcards...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dropzoneContainer">
@@ -145,11 +186,14 @@ function FileDropzone({fetchUrl}) {
   );
 }
 
-const FlashCardSet = ({flashcardData, studysetId}) => {
-    const [cards, setCards] = useState(flashcardData);
-    const {fetchUrl, data, isLoading, error, resetState} = useFetch();
 
-  // Helper: sync entire card array to backend
+
+// Flashcard set display component
+const FlashCardSet = ({ flashcardData, studysetId }) => {
+  const [cards, setCards] = useState(flashcardData);
+  const { fetchUrl } = useFetch();
+
+  // Sync flashcards to backend
   const syncToBackend = async (updatedCards) => {
     const userId = getUserId();
     await fetchUrl({
@@ -193,40 +237,39 @@ const FlashCardSet = ({flashcardData, studysetId}) => {
     await syncToBackend(updated);
   };
 
-    return (    
+  return (
     <div className="flashcardSet">
       <header>
-        <div className= "cardbox">
-          <div className = "descBox">
+        <div className="cardbox">
+          <div className="descBox">
             <div className="leftDescBox">
-              <div className = "flashcardName">
-                <input type="text" placeholder="Enter Flashcard Name"/>
+              <div className="flashcardName">
+                <input type="text" placeholder="Enter Flashcard Name" />
               </div>
               <AddCardButton onAdd={addCard} />
             </div>
-            <div className = "flashcardDesc">
-              <textarea id = "message" name = "message" rows="10" cols="90">
-              </textarea>
+            <div className="flashcardDesc">
+              <textarea id="message" name="message" rows="10" cols="90"></textarea>
             </div>
           </div>
-          
-        {cards.map(card => (
-          <FlashCardsMaker
-            key={card.id}
-            id={card.id}
-            cardfront={card.question}
-            cardback={card.answer}
-            onDelete={removeCard}
-            onEdit={editCard}
-          />
-        ))}
 
+          {cards.map(card => (
+            <FlashCardsMaker
+              key={card.id}
+              id={card.id}
+              cardfront={card.question}
+              cardback={card.answer}
+              onDelete={removeCard}
+              onEdit={editCard}
+            />
+          ))}
         </div>
       </header>
     </div>
-    );
+  );
 };
 
+// Load flashcard sets from backend
 const useLoadFlashcardSets = () => {
   const { fetchUrl } = useFetch();
   const [flashcardData, setFlashcardData] = useState({
@@ -265,22 +308,29 @@ const useLoadFlashcardSets = () => {
     };
 
     loadStudySets();
-  }, []);
+
+    const intervalId = setInterval(() => {
+      loadStudySets();
+    }, 5000); // Refresh every 5 seconds
+
+    return () => clearInterval(intervalId);
+
+  }, []); 
 
   return { flashcardData, setFlashcardData };
 };
 
-
+// Main Library component
 const Library = () => {
-  const {fileFetchUrl, fileData, fileIsLoading, fileError, fileResetState } = useFetchWithFile(); //For drag & drop
-  const {fetchUrl, data, isLoading, error, resetState} = useFetch();
-  const {flashcardData, setFlashcardData} = useLoadFlashcardSets();
+  const { fileFetchUrl, fileData, fileIsLoading, fileError, fileResetState } = useFetchWithFile();
+  const { fetchUrl, data, isLoading, error, resetState } = useFetch();
+  const { flashcardData, setFlashcardData } = useLoadFlashcardSets();
 
   const handleAddingFlashcardSet = useCallback(async () => {
     const userId = getUserId();
 
     if (!userId) {
-      alert("PLEASE SIGN IN FOR FUNCTIONALITY");
+      alert("Please sign in!");
       return;
     }
 
@@ -290,7 +340,6 @@ const Library = () => {
         method: 'POST',
       });
 
-      // Result contains `studyset` and `user`
       const studyset = result?.studyset;
       const cards = Array.isArray(studyset?.flashcards) ? studyset.flashcards : [];
 
@@ -310,19 +359,14 @@ const Library = () => {
       console.error('Failed to add studyset', err);
       alert('Failed to add studyset');
     }
-  }, []);
-
-  const handleRemovingFlashcardSet = async () => {
-    //TODO remove flashcard set & fetch
-
-  }
+  }, [fetchUrl, setFlashcardData]);
 
   if (fileError) {
     console.error("Error fetching flashcard data:", fileError);
-    fileResetState(); // Reset state to allow for retrying
+    fileResetState();
   } else if (fileData) {
     console.log("Fetched flashcard data:", fileData);
-    fileResetState(); // Clear data after successful fetch to prevent repeated updates
+    fileResetState();
   }
 
   if (error) {
@@ -339,15 +383,19 @@ const Library = () => {
         <SortingBar />
         <AddFlashcardSetButton onAdd={handleAddingFlashcardSet} />
       </div>
-      <FileDropzone fetchUrl={fileFetchUrl}/>
-    {flashcardData.cardSets.map(
-        (flashCardSets, index) => (
-          <FlashCardSet key={index} flashcardData={flashCardSets.cards} studysetId={flashCardSets.studysetId}/>
+      <FileDropzone fetchUrl={fileFetchUrl} isLoading={fileIsLoading} setFlashcardData={setFlashcardData} />
+      {flashcardData.cardSets.length > 0 ? (
+        flashcardData.cardSets.map(
+          (flashCardSets, index) => (
+            <FlashCardSet key={index} flashcardData={flashCardSets.cards} studysetId={flashCardSets.studysetId} />
+          )
         )
+      ) : (
+        <p>No flashcards available</p>
       )}
     </div>
-  )
-}
+  );
+};
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -355,6 +403,4 @@ createRoot(document.getElementById('root')).render(
     <Library />
     <Footer />
   </StrictMode>,
-)
-
-
+);

@@ -44,14 +44,14 @@ export const useFetch = () => {
 
 export const useFetchWithFile = () => { 
   const [fileData, setData] = useState(null);
-  const [fileIsLoading, setLoading] = useState(true);
+  const [fileIsLoading, setLoading] = useState(false); 
   const [fileError, setError] = useState(null);
 
   const fileResetState = () => {
     setData(null);
     setError(null);
-    setLoading(true);
-  }
+    setLoading(false); 
+  };
 
   const fileFetchUrl = async ({ url, method = "GET", body }) => {
     setError(null);
@@ -79,9 +79,9 @@ export const useFetchWithFile = () => {
       setError(err);
       setData(null);
       console.error("Fetch error:", err);
-      throw err; // <- so frontend can also catch it
+      throw err; 
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 

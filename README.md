@@ -12,10 +12,8 @@ Users can upload files that they wish to generate flashcards from into Memolyzer
 **4.** Change directory to backend with ```cd ../backend```  and then run in command line ```npm install```\
 **5.** Return to root directory ```cd .../../``` 
 
-## Instructions to use
+## How to run Memolyzer
 **1.** Run both frontend and backend with
 ```npm run dev``` \
-**2.** Run both frontend and backend with
-```npm run dev``` \
-**3.** Click on the locally generated link!
+**2.** Click on the locally generated link!
 

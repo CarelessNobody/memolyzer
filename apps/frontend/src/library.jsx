@@ -35,7 +35,7 @@ const SortingBar = () => {
     return (
       <>
         <div className="searchBar">
-            <input type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
+            <input role="search" aria-label="search flashcards" type="text" className="searchBar" placeholder="Search" onChange={handleSearchChange} />
         </div>
         <div className = "sortGroup">
           <div className="sortOption">

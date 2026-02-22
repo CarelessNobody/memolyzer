@@ -205,7 +205,7 @@ const FlashCardSet = ({flashcardData, studysetId}) => {
             </div>
           </div>
           
-{cards.map(card => (
+        {cards.map(card => (
           <FlashCardsMaker
             key={card.id}
             id={card.id}
@@ -291,7 +291,16 @@ const Library = () => {
 
       const mapped = cards.map((c, i) => ({ id: `${studyset._id}_${i}`, question: c.question, answer: c.answer }));
 
-      setFlashcardData(prev => ({ ...prev, cardSets: [...prev.cardSets, mapped] }));
+      setFlashcardData(prev => ({
+        ...prev,
+        cardSets: [
+          ...prev.cardSets,
+          {
+            studysetId: studyset._id,
+            cards: mapped
+          }
+        ]
+      }));
     } catch (err) {
       console.error('Failed to add studyset', err);
       alert('Failed to add studyset');
